@@ -1,0 +1,1 @@
+docs/superpowers/specs/2026-04-12-minimax-status-bar-design.md
