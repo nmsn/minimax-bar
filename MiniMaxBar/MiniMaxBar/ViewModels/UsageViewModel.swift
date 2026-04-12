@@ -58,7 +58,8 @@ final class UsageViewModel {
         await fetchUsage()
     }
 
-    deinit {
+    func cleanup() {
         timer?.invalidate()
+        timer = nil
     }
 }

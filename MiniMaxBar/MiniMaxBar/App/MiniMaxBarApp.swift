@@ -7,12 +7,12 @@ struct MiniMaxBarApp: App {
     var body: some Scene {
         MenuBarExtra {
             PopoverContentView(viewModel: viewModel)
+                .onAppear {
+                    viewModel.startAutoRefresh()
+                }
         } label: {
             StatusBarView(usageData: viewModel.usageData)
         }
         .menuBarExtraStyle(.window)
-        .onAppear {
-            viewModel.startAutoRefresh()
-        }
     }
 }
