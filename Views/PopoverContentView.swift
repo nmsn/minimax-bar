@@ -24,7 +24,7 @@ struct PopoverContentView: View {
             footerSection
         }
         .padding()
-        .frame(width: 280, height: viewModel.showingTokenInput ? 260 : 240)
+        .frame(width: 280, height: viewModel.showingTokenInput ? 320 : 300)
     }
 
     private var headerSection: some View {
@@ -49,7 +49,7 @@ struct PopoverContentView: View {
                 .foregroundColor(.secondary)
             Text("platform.minimaxi.com/user-center/payment/coding-plan")
                 .font(.caption2)
-                .foregroundColor(.blue)
+                .foregroundColor(.accentColor)
 
             PasteableTextField(text: $viewModel.tokenInput, placeholder: "输入你的 Token")
                 .frame(height: 24)
@@ -68,15 +68,15 @@ struct PopoverContentView: View {
             }
         }
         .padding()
-        .background(Color.blue.opacity(0.1))
+        .background(Color.accentColor.opacity(0.08))
         .cornerRadius(8)
     }
 
     private func errorSection(_ error: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("⚠️ 错误")
-                .foregroundColor(.red)
+            Label("错误", systemImage: "exclamationmark.triangle.fill")
                 .font(.subheadline.bold())
+                .foregroundColor(.red)
             Text(error)
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -109,7 +109,6 @@ struct PopoverContentView: View {
         VStack(alignment: .leading, spacing: 4) {
             Label("日 (5小时窗口)", systemImage: "sun.max")
                 .font(.caption.bold())
-                .foregroundColor(.orange)
 
             HStack {
                 Text("剩余: \(viewModel.usageData?.dailyRemaining ?? 0)/\(viewModel.usageData?.dailyTotal ?? 0) 次")
@@ -122,7 +121,7 @@ struct PopoverContentView: View {
                 .foregroundColor(.secondary)
         }
         .padding(8)
-        .background(Color.orange.opacity(0.1))
+        .background(Color.orange.opacity(0.15))
         .cornerRadius(6)
     }
 
@@ -130,7 +129,6 @@ struct PopoverContentView: View {
         VStack(alignment: .leading, spacing: 4) {
             Label("周", systemImage: "calendar")
                 .font(.caption.bold())
-                .foregroundColor(.blue)
 
             HStack {
                 Text("剩余: \(viewModel.usageData?.weeklyRemaining ?? 0)/\(viewModel.usageData?.weeklyTotal ?? 0) 次")
@@ -143,7 +141,7 @@ struct PopoverContentView: View {
                 .foregroundColor(.secondary)
         }
         .padding(8)
-        .background(Color.blue.opacity(0.1))
+        .background(Color.blue.opacity(0.15))
         .cornerRadius(6)
     }
 
@@ -160,9 +158,15 @@ struct PopoverContentView: View {
 
     private var statusSection: some View {
         HStack {
-            Text(viewModel.usageData?.statusText ?? "未知")
-                .font(.caption.bold())
-                .foregroundColor(viewModel.usageData?.isHealthy == true ? .green : .red)
+            if viewModel.usageData?.isHealthy == true {
+                Label("正常使用", systemImage: "checkmark.circle.fill")
+                    .font(.caption.bold())
+                    .foregroundColor(.green)
+            } else {
+                Label("使用量紧张", systemImage: "exclamationmark.circle.fill")
+                    .font(.caption.bold())
+                    .foregroundColor(.red)
+            }
             Spacer()
         }
     }
@@ -178,7 +182,7 @@ struct PopoverContentView: View {
 
     private var emptySection: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("未配置")
+            Label("未配置", systemImage: "gear")
                 .font(.subheadline.bold())
             Text("请先配置 MiniMax Token")
                 .font(.caption)

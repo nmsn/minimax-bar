@@ -43,7 +43,7 @@ final class ConfigService {
                 cachedGroupId = json["groupId"] as? String
             }
         } catch {
-            print("ConfigService: Failed to load config: \(error)")
+            // Ignore load errors, use defaults
         }
     }
 
@@ -60,7 +60,7 @@ final class ConfigService {
             let data = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
             try data.write(to: configPath)
         } catch {
-            print("ConfigService: Failed to save config: \(error)")
+            // Ignore save errors
         }
     }
 
