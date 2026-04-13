@@ -13,11 +13,23 @@ struct StatusBarView: View {
         return "\(Int(data.weeklyUsedPercentage * 100))%"
     }
 
+    private var statusColor: Color {
+        guard let data = usageData, data.dailyTotal > 0 else { return .green }
+        let remainingRatio = Double(data.dailyRemaining) / Double(data.dailyTotal)
+        if remainingRatio < 0.1 {
+            return .red
+        } else if remainingRatio < 0.5 {
+            return .yellow
+        } else {
+            return .green
+        }
+    }
+
     var body: some View {
         HStack(spacing: 2) {
             Image(systemName: "circle.fill")
-                .font(.system(size: 9))
-                .foregroundColor(.green)
+                .font(.system(size: 12))
+                .foregroundColor(statusColor)
 
             VStack(alignment: .leading, spacing: 0) {
                 Text(dailyPercent)
@@ -26,8 +38,8 @@ struct StatusBarView: View {
                     .font(.system(size: 9, weight: .medium, design: .monospaced))
             }
         }
-        .padding(.horizontal, 6)
-        .frame(width: 52, height: 22, alignment: .leading)
+        .padding(.horizontal, 4)
+        .frame(width: 36, height: 22, alignment: .leading)
     }
 }
 
