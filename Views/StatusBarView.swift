@@ -27,7 +27,7 @@ struct StatusBarView: View {
             }
         }
         .padding(.horizontal, 6)
-        .frame(width: 40, height: 22, alignment: .leading)
+        .frame(width: 52, height: 22, alignment: .leading)
     }
 }
 
