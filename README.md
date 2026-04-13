@@ -6,25 +6,25 @@
 ![Version](https://img.shields.io/github/v/release/nmsn/minimax-bar)
 ![Downloads](https://img.shields.io/github/downloads/nmsn/minimax-bar/total)
 
- macOS 菜单栏应用，用于展示 MiniMax API 使用量。
+A macOS menu bar app displaying MiniMax API usage statistics.
 
-## 功能
+## Features
 
-- 菜单栏实时显示日/周使用量百分比
-- 动态图标颜色指示使用状态
-  - 绿色：剩余 ≥ 50%
-  - 黄色：剩余 10% ~ 50%
-  - 红色：剩余 < 10%
-- 左键点击打开详情 popover
-- 右键菜单快速操作
-- Token 配置与管理
-- Sparkle 自动更新支持
+- Real-time daily/weekly usage percentage in menu bar
+- Dynamic icon color indicating usage status
+  - Green: remaining ≥ 50%
+  - Yellow: remaining 10% ~ 50%
+  - Red: remaining < 10%
+- Left-click to open details popover
+- Right-click context menu for quick actions
+- Token configuration and management
+- Sparkle auto-update support
 
-## 系统要求
+## Requirements
 
-- macOS 14.0 或更高版本
+- macOS 14.0 or later
 
-## 安装
+## Installation
 
 ### Homebrew
 
@@ -32,48 +32,48 @@
 brew install --cask minimax-bar
 ```
 
-### 手动安装
+### Manual Installation
 
-1. 从 [Releases](https://github.com/nmsn/minimax-bar/releases) 下载最新版本 `.dmg` 文件
-2. 双击打开 DMG
-3. 将 `minimax-bar` 拖入 Applications 文件夹
-4. 首次运行时，右键点击应用选择"打开"
+1. Download the latest `.dmg` from [Releases](https://github.com/nmsn/minimax-bar/releases)
+2. Double-click to open the DMG
+3. Drag `minimax-bar` into Applications folder
+4. On first run, right-click the app and select "Open"
 
-## 使用
+## Usage
 
-1. 首次打开后，点击菜单栏图标
-2. 在弹出窗口中点击右上角按钮获取 Token
-3. 访问 [MiniMax 平台](https://platform.minimaxi.com/user-center/payment/coding-plan) 获取 Token
-4. 粘贴 Token 并保存
-5. 菜单栏将实时显示使用量
+1. Click the menu bar icon after launching
+2. Click the button in the top-right corner to get Token
+3. Visit [MiniMax Platform](https://platform.minimaxi.com/user-center/payment/coding-plan) to get your Token
+4. Paste and save the Token
+5. The menu bar will display usage statistics in real-time
 
-## 开发
+## Development
 
-### 构建
+### Build
 
 ```bash
-# 安装依赖
+# Install dependencies
 xcodegen generate
 
-# Debug 构建
+# Debug build
 xcodebuild -project minimax-bar.xcodeproj -scheme minimax-bar -configuration Debug build
 
-# Release 构建
+# Release build
 xcodebuild -project minimax-bar.xcodeproj -scheme minimax-bar -configuration Release build
 ```
 
-### 打包
+### Package
 
 ```bash
 hdiutil create -volname minimax-bar -srcfolder build/Release/minimax-bar.app -ov -format UDZO -o minimax-bar.dmg
 ```
 
-## 技术栈
+## Tech Stack
 
 - Swift + SwiftUI
 - AppKit (NSStatusItem, NSPopover)
-- Sparkle (自动更新)
-- XcodeGen (项目生成)
+- Sparkle (Auto-update)
+- XcodeGen (Project generation)
 
 ## License
 
