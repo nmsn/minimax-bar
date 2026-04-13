@@ -1,5 +1,7 @@
 import SwiftUI
 
+import Sparkle
+
 struct PopoverContentView: View {
     @ObservedObject var viewModel: UsageViewModel
 
@@ -233,6 +235,14 @@ struct PopoverContentView: View {
                     }
                 }) {
                     Label("刷新", systemImage: "arrow.clockwise")
+                        .font(.caption)
+                }
+                .buttonStyle(.bordered)
+
+                Button(action: {
+                    UpdateService.shared.checkForUpdates()
+                }) {
+                    Label("检查更新", systemImage: "arrow.down.circle")
                         .font(.caption)
                 }
                 .buttonStyle(.bordered)

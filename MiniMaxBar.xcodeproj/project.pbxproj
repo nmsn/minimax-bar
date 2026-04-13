@@ -8,8 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		00204F62F033EC92F7882E2A /* UsageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9BA1D9CCFD148BB268BCED /* UsageData.swift */; };
+		0CC00949F54D9E1C99A8B5A0 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 4CD2B6AA59354376B6199744 /* Sparkle */; };
 		1681FB3615CDA5A2AE1B6974 /* PopoverContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF42BE07546895634536AB76 /* PopoverContentView.swift */; };
 		183855E1E92187B546181890 /* ConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72564395C40F7134880B4952 /* ConfigService.swift */; };
+		23675DFDA883943CA7E6D362 /* UpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3C223DDBDD497A9FE14AB0 /* UpdateService.swift */; };
 		5B43B7BF8E58115C586CCC98 /* StatusBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36CE95E9B407987099519275 /* StatusBarController.swift */; };
 		7E0BC1CF9AA16D75CE3F9F8B /* UsageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC05F536332F93CECD941E9 /* UsageViewModel.swift */; };
 		8886DD2876982EA364CCA4EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9B58FB30967FE6755B2110 /* AppDelegate.swift */; };
@@ -25,6 +27,7 @@
 		36CE95E9B407987099519275 /* StatusBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarController.swift; sourceTree = "<group>"; };
 		4C9BA1D9CCFD148BB268BCED /* UsageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageData.swift; sourceTree = "<group>"; };
 		72564395C40F7134880B4952 /* ConfigService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigService.swift; sourceTree = "<group>"; };
+		7B3C223DDBDD497A9FE14AB0 /* UpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateService.swift; sourceTree = "<group>"; };
 		933B5730DC2B67467CD8DEF4 /* MiniMaxBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MiniMaxBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9822F5F485DEE7A633E81FD9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AF9B58FB30967FE6755B2110 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -34,6 +37,17 @@
 		F5B5C81B96DE090713FB96BC /* StatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarView.swift; sourceTree = "<group>"; };
 		FC067E4ECB394551BF3A7D81 /* MiniMaxAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniMaxAPIService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		18F5FEB1D2DDEA15AC9418CB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0CC00949F54D9E1C99A8B5A0 /* Sparkle in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		077D11ACDEA708FCE324D031 = {
@@ -96,6 +110,7 @@
 			children = (
 				72564395C40F7134880B4952 /* ConfigService.swift */,
 				FC067E4ECB394551BF3A7D81 /* MiniMaxAPIService.swift */,
+				7B3C223DDBDD497A9FE14AB0 /* UpdateService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -127,6 +142,7 @@
 			buildPhases = (
 				847F40C61A1CEAA678A0399B /* Sources */,
 				3AA9456D6701AA1D94C21661 /* Resources */,
+				18F5FEB1D2DDEA15AC9418CB /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -134,6 +150,7 @@
 			);
 			name = MiniMaxBar;
 			packageProductDependencies = (
+				4CD2B6AA59354376B6199744 /* Sparkle */,
 			);
 			productName = MiniMaxBar;
 			productReference = 933B5730DC2B67467CD8DEF4 /* MiniMaxBar.app */;
@@ -159,6 +176,9 @@
 			);
 			mainGroup = 077D11ACDEA708FCE324D031;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				5C042704FAACFD7C1DC88B59 /* XCRemoteSwiftPackageReference "Sparkle" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 82F21374F255D30A8DB5D3E2 /* Products */;
 			projectDirPath = "";
@@ -192,6 +212,7 @@
 				1681FB3615CDA5A2AE1B6974 /* PopoverContentView.swift in Sources */,
 				5B43B7BF8E58115C586CCC98 /* StatusBarController.swift in Sources */,
 				E75F248FA702D76BDBA0633A /* StatusBarView.swift in Sources */,
+				23675DFDA883943CA7E6D362 /* UpdateService.swift in Sources */,
 				00204F62F033EC92F7882E2A /* UsageData.swift in Sources */,
 				7E0BC1CF9AA16D75CE3F9F8B /* UsageViewModel.swift in Sources */,
 				C7346CF0E915F06BCF44CAA8 /* main.swift in Sources */,
@@ -276,6 +297,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.minimax.statusbar;
 				SDKROOT = macosx;
+				SUPublicEDKey = "8n6qpNCw5nnChaXomz88SKWPaYUXfvSo8P9fMpq/6hs=";
 			};
 			name = Release;
 		};
@@ -295,6 +317,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.minimax.statusbar;
 				SDKROOT = macosx;
+				SUPublicEDKey = "8n6qpNCw5nnChaXomz88SKWPaYUXfvSo8P9fMpq/6hs=";
 			};
 			name = Debug;
 		};
@@ -386,6 +409,25 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5C042704FAACFD7C1DC88B59 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.6.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4CD2B6AA59354376B6199744 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5C042704FAACFD7C1DC88B59 /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C8DCF989720B7EBB67BEE469 /* Project object */;
 }

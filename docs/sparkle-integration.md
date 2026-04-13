@@ -1,0 +1,77 @@
+# MiniMaxBar Sparkle 更新集成文档
+
+## 密钥信息
+
+- **EdDSA 公钥**: `8n6qpNCw5nnChaXomz88SKWPaYUXfvSo8P9fMpq/6hs=`
+- **密钥位置**: Mac Keychain 中
+- **警告**: 私钥删除后无法解密更新，务必妥善保管
+
+## 发布更新步骤
+
+### 1. 构建 Release 版本
+
+```bash
+xcodebuild -project MiniMaxBar.xcodeproj -scheme MiniMaxBar -configuration Release build
+```
+
+### 2. 打包为 .dmg 格式
+
+使用 `Disk Utility` 或命令行创建 .dmg：
+```bash
+hdiutil create -volname MiniMaxBar -srcfolder build/Release/MiniMaxBar.app -ov -format UDZO MiniMaxBar.dmg
+```
+
+### 3. 对 .dmg 进行签名（可选但推荐）
+
+使用 Developer ID 签名：
+```bash
+codesign --force --sign "Developer ID Application: YOUR_NAME" --deep MiniMaxBar.dmg
+```
+
+### 4. 创建 GitHub Release
+
+1. 访问 GitHub 仓库的 Releases 页面
+2. 点击 "Draft a new release"
+3. 填写版本号（如 `v1.0.1`）
+4. 上传 `.dmg` 文件
+5. 发布 Release
+
+### 5. 配置 Appcast（首次）
+
+创建 `appcast.xml` 在 GitHub Pages 或其他托管地址：
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+  <channel>
+    <title>MiniMaxBar Updates</title>
+    <link>https://你的用户名.github.io/MiniMaxBar/appcast.xml</link>
+    <item>
+      <title>Version 1.0.1</title>
+      <sparkle:releaseNotesLink>https://你的用户名.github.io/MiniMaxBar/notes.html</sparkle:releaseNotesLink>
+      <pubDate>Mon, 13 Apr 2026 12:00:00 +0800</pubDate>
+      <enclosure url="https://github.com/你的用户名/MiniMaxBar/releases/download/v1.0.1/MiniMaxBar.dmg" sparkle:version="1.0.1" length="1234567" type="application/octet-stream"/>
+    </item>
+  </channel>
+</rss>
+```
+
+### 6. 在 project.yml 中配置 Appcast URL
+
+```yaml
+settings:
+  base:
+    SUAppcastURL: "https://你的用户名.github.io/MiniMaxBar/appcast.xml"
+```
+
+## Sparkle 密钥生成（如果需要重新生成）
+
+```bash
+# 路径可能在 DerivedData 中
+~/Library/Developer/Xcode/DerivedData/MiniMaxBar-*/SourcePackages/artifacts/sparkle/Sparkle/bin/generate_keys
+```
+
+## 相关文件
+
+- `Services/UpdateService.swift` - Sparkle 更新服务
+- `Views/PopoverContentView.swift` - UI 中的"检查更新"按钮
