@@ -41,15 +41,17 @@ struct PopoverContentView: View {
 
     private var tokenInputSection: some View {
         VStack(spacing: 12) {
-            Text("配置 MiniMax Token")
-                .font(.subheadline.bold())
-
-            Text("获取 Token:")
-                .font(.caption)
-                .foregroundColor(.secondary)
-            Text("platform.minimaxi.com/user-center/payment/coding-plan")
-                .font(.caption2)
-                .foregroundColor(.accentColor)
+            HStack {
+                Text("配置 MiniMax Token")
+                    .font(.subheadline.bold())
+                Spacer()
+                Button("获取 Token") {
+                    if let url = URL(string: "https://platform.minimaxi.com/user-center/payment/coding-plan") {
+                        NSWorkspace.shared.open(url)
+                    }
+                }
+                .buttonStyle(.bordered)
+            }
 
             PasteableTextField(text: $viewModel.tokenInput, placeholder: "输入你的 Token")
                 .frame(height: 24)
