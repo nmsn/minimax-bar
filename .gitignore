@@ -11,6 +11,7 @@ DerivedData/
 
 # Build
 .build/
+*.dmg
 
 # IDE
 .vscode/
