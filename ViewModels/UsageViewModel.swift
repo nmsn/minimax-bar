@@ -1,13 +1,22 @@
 import Foundation
 import SwiftUI
+import Combine
 
 @MainActor
-@Observable
-final class UsageViewModel {
+protocol UsageViewModelDelegate: AnyObject {
+    func usageViewModel(_ viewModel: UsageViewModel, didUpdateUsageData data: UsageData?)
+}
+
+@MainActor
+final class UsageViewModel: ObservableObject {
     var usageData: UsageData?
     var errorMessage: String?
     var isLoading: Bool = false
     var isConfigured: Bool = false
+    @Published var showingTokenInput: Bool = false
+    @Published var tokenInput: String = ""
+
+    weak var delegate: UsageViewModelDelegate?
 
     private var timer: Timer?
 
@@ -47,8 +56,10 @@ final class UsageViewModel {
             let data = try await MiniMaxAPIService.shared.fetchUsage()
             self.usageData = data
             self.errorMessage = nil
+            delegate?.usageViewModel(self, didUpdateUsageData: data)
         } catch {
             self.errorMessage = error.localizedDescription
+            delegate?.usageViewModel(self, didUpdateUsageData: nil)
         }
 
         isLoading = false
@@ -56,6 +67,31 @@ final class UsageViewModel {
 
     func refresh() async {
         await fetchUsage()
+    }
+
+    func toggleTokenInput() {
+        withAnimation {
+            showingTokenInput = true
+        }
+    }
+
+    func saveToken() {
+        let trimmedToken = tokenInput.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedToken.isEmpty else { return }
+
+        ConfigService.shared.token = trimmedToken
+        isConfigured = true
+        showingTokenInput = false
+        tokenInput = ""
+
+        Task {
+            await fetchUsage()
+        }
+    }
+
+    func cancelTokenInput() {
+        showingTokenInput = false
+        tokenInput = ""
     }
 
     func cleanup() {

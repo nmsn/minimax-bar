@@ -16,12 +16,19 @@ targets:
     type: application
     platform: macOS
     sources:
-      - path: MiniMaxBar
+      - path: App
+      - path: Models
+      - path: Resources
+      - path: Services
+      - path: StatusBar
+      - path: ViewModels
+      - path: Views
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.minimax.statusbar
         INFOPLIST_GENERATION_MODE: GeneratedFile
         INFOPLIST_KEY_CFBASEDisplayName: MiniMaxBar
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
+        INFOPLIST_KEY_LSUIElement: YES
         GENERATE_INFOPLIST_FILE: YES
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon

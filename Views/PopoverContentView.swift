@@ -1,16 +1,18 @@
 import SwiftUI
 
 struct PopoverContentView: View {
-    @Bindable var viewModel: UsageViewModel
+    @ObservedObject var viewModel: UsageViewModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             headerSection
 
-            if let error = viewModel.errorMessage {
+            if viewModel.showingTokenInput {
+                tokenInputSection
+            } else if let error = viewModel.errorMessage {
                 errorSection(error)
-            } else if let data = viewModel.usageData {
-                usageSection(data)
+            } else if viewModel.usageData != nil {
+                usageSection
             } else if viewModel.isLoading {
                 loadingSection
             } else {
@@ -22,7 +24,7 @@ struct PopoverContentView: View {
             footerSection
         }
         .padding()
-        .frame(width: 280, height: 240)
+        .frame(width: 280, height: viewModel.showingTokenInput ? 260 : 240)
     }
 
     private var headerSection: some View {
@@ -35,6 +37,39 @@ struct PopoverContentView: View {
                     .scaleEffect(0.7)
             }
         }
+    }
+
+    private var tokenInputSection: some View {
+        VStack(spacing: 12) {
+            Text("配置 MiniMax Token")
+                .font(.subheadline.bold())
+
+            Text("获取 Token:")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            Text("platform.minimaxi.com/user-center/payment/coding-plan")
+                .font(.caption2)
+                .foregroundColor(.blue)
+
+            TextField("输入你的 Token", text: $viewModel.tokenInput)
+                .textFieldStyle(.roundedBorder)
+
+            HStack {
+                Button("取消") {
+                    viewModel.cancelTokenInput()
+                }
+                .buttonStyle(.bordered)
+
+                Button("保存") {
+                    viewModel.saveToken()
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(viewModel.tokenInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            }
+        }
+        .padding()
+        .background(Color.blue.opacity(0.1))
+        .cornerRadius(8)
     }
 
     private func errorSection(_ error: String) -> some View {
@@ -52,37 +87,37 @@ struct PopoverContentView: View {
         .cornerRadius(8)
     }
 
-    private func usageSection(_ data: UsageData) -> some View {
+    private var usageSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("当前模型: \(data.modelName)")
+            Text("当前模型: \(viewModel.usageData?.modelName ?? "Unknown")")
                 .font(.subheadline)
 
             Divider()
 
-            dailySection(data)
-            weeklySection(data)
+            dailySection
+            weeklySection
 
-            if let expiry = data.expiryDate {
+            if let expiry = viewModel.usageData?.expiryDate {
                 expirySection(expiry)
             }
 
-            statusSection(data)
+            statusSection
         }
     }
 
-    private func dailySection(_ data: UsageData) -> some View {
+    private var dailySection: some View {
         VStack(alignment: .leading, spacing: 4) {
             Label("日 (5小时窗口)", systemImage: "sun.max")
                 .font(.caption.bold())
                 .foregroundColor(.orange)
 
             HStack {
-                Text("剩余: \(data.dailyRemaining)/\(data.dailyTotal) 次")
+                Text("剩余: \(viewModel.usageData?.dailyRemaining ?? 0)/\(viewModel.usageData?.dailyTotal ?? 0) 次")
                     .font(.caption)
                 Spacer()
             }
 
-            Text("重置: \(data.dailyResetTime)")
+            Text("重置: \(viewModel.usageData?.dailyResetTime ?? "")")
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -91,19 +126,19 @@ struct PopoverContentView: View {
         .cornerRadius(6)
     }
 
-    private func weeklySection(_ data: UsageData) -> some View {
+    private var weeklySection: some View {
         VStack(alignment: .leading, spacing: 4) {
             Label("周", systemImage: "calendar")
                 .font(.caption.bold())
                 .foregroundColor(.blue)
 
             HStack {
-                Text("剩余: \(data.weeklyRemaining)/\(data.weeklyTotal) 次")
+                Text("剩余: \(viewModel.usageData?.weeklyRemaining ?? 0)/\(viewModel.usageData?.weeklyTotal ?? 0) 次")
                     .font(.caption)
                 Spacer()
             }
 
-            Text("重置: \(data.weeklyResetTime)")
+            Text("重置: \(viewModel.usageData?.weeklyResetTime ?? "")")
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -123,11 +158,11 @@ struct PopoverContentView: View {
         }
     }
 
-    private func statusSection(_ data: UsageData) -> some View {
+    private var statusSection: some View {
         HStack {
-            Text(data.statusText)
+            Text(viewModel.usageData?.statusText ?? "未知")
                 .font(.caption.bold())
-                .foregroundColor(data.isHealthy ? .green : .red)
+                .foregroundColor(viewModel.usageData?.isHealthy == true ? .green : .red)
             Spacer()
         }
     }
@@ -156,7 +191,7 @@ struct PopoverContentView: View {
     }
 
     private var footerSection: some View {
-        HStack {
+        HStack(spacing: 12) {
             Button(action: {
                 Task {
                     await viewModel.refresh()
@@ -169,39 +204,22 @@ struct PopoverContentView: View {
 
             Spacer()
 
-            if !viewModel.isConfigured {
-                Button(action: openConfig) {
+            if !viewModel.showingTokenInput {
+                Button(action: { viewModel.toggleTokenInput() }) {
                     Label("设置 Token", systemImage: "gear")
                         .font(.caption)
                 }
                 .buttonStyle(.bordered)
             }
+
+            Spacer()
+
+            Button(action: { NSApplication.shared.terminate(nil) }) {
+                Label("退出", systemImage: "power")
+                    .font(.caption)
+            }
+            .buttonStyle(.bordered)
         }
-    }
-
-    private func openConfig() {
-        let home = FileManager.default.homeDirectoryForCurrentUser
-        let configPath = home.appendingPathComponent(".minimax-config.json")
-
-        let message = """
-        请在 ~/.minimax-config.json 配置 Token:
-
-        {
-            "token": "your_token_here"
-        }
-
-        获取 Token: https://platform.minimaxi.com/user-center/payment/coding-plan
-        """
-
-        let alert = NSAlert()
-        alert.messageText = "配置 MiniMax Token"
-        alert.informativeText = message
-        alert.alertStyle = .informational
-        alert.addButton(withTitle: "打开配置目录")
-        alert.addButton(withTitle: "好的")
-
-        if alert.runModal() == .alertFirstButtonReturn {
-            NSWorkspace.shared.selectFile(configPath.path, inFileViewerRootedAtPath: home.path)
-        }
+        .padding(.vertical, 4)
     }
 }
