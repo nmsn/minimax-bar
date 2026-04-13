@@ -9,6 +9,8 @@ struct PopoverContentView: View {
 
             if viewModel.showingTokenInput {
                 tokenInputSection
+            } else if viewModel.showingTokenReset {
+                tokenResetSection
             } else if let error = viewModel.errorMessage {
                 errorSection(error)
             } else if viewModel.usageData != nil {
@@ -24,7 +26,10 @@ struct PopoverContentView: View {
             footerSection
         }
         .padding()
-        .frame(width: 280, height: viewModel.showingTokenInput ? 320 : 300)
+        .frame(width: 280, height: 280)
+        .onAppear {
+            viewModel.resetToUsageView()
+        }
     }
 
     private var headerSection: some View {
@@ -34,7 +39,6 @@ struct PopoverContentView: View {
             Spacer()
             if viewModel.isLoading {
                 ProgressView()
-                    .scaleEffect(0.7)
             }
         }
     }
@@ -42,8 +46,10 @@ struct PopoverContentView: View {
     private var tokenInputSection: some View {
         VStack(spacing: 12) {
             HStack {
-                Text("配置 MiniMax Token")
-                    .font(.subheadline.bold())
+                Button("返回") {
+                    viewModel.resetToUsageView()
+                }
+                .buttonStyle(.bordered)
                 Spacer()
                 Button("获取 Token") {
                     if let url = URL(string: "https://platform.minimaxi.com/user-center/payment/coding-plan") {
@@ -53,12 +59,15 @@ struct PopoverContentView: View {
                 .buttonStyle(.bordered)
             }
 
+            Text("配置 MiniMax Token")
+                .font(.subheadline.bold())
+
             PasteableTextField(text: $viewModel.tokenInput, placeholder: "输入你的 Token")
-                .frame(height: 24)
+                .frame(height: 60)
 
             HStack {
                 Button("取消") {
-                    viewModel.cancelTokenInput()
+                    viewModel.resetToUsageView()
                 }
                 .buttonStyle(.bordered)
 
@@ -70,6 +79,31 @@ struct PopoverContentView: View {
             }
         }
         .padding()
+        .background(Color.accentColor.opacity(0.08))
+        .cornerRadius(8)
+    }
+
+    private var tokenResetSection: some View {
+        VStack(spacing: 16) {
+            HStack {
+                Button("返回") {
+                    viewModel.resetToUsageView()
+                }
+                .buttonStyle(.bordered)
+                Spacer()
+            }
+
+            Label("Token 已配置", systemImage: "checkmark.circle.fill")
+                .font(.subheadline.bold())
+                .foregroundColor(.green)
+
+            Button("重置 Token") {
+                viewModel.showTokenReset()
+            }
+            .buttonStyle(.bordered)
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
         .background(Color.accentColor.opacity(0.08))
         .cornerRadius(8)
     }

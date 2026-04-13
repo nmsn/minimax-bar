@@ -12,8 +12,9 @@ final class UsageViewModel: ObservableObject {
     var usageData: UsageData?
     var errorMessage: String?
     var isLoading: Bool = false
-    var isConfigured: Bool = false
+    @Published var isConfigured: Bool = false
     @Published var showingTokenInput: Bool = false
+    @Published var showingTokenReset: Bool = false
     @Published var tokenInput: String = ""
 
     weak var delegate: UsageViewModelDelegate?
@@ -71,7 +72,21 @@ final class UsageViewModel: ObservableObject {
 
     func toggleTokenInput() {
         withAnimation {
+            if isConfigured {
+                showingTokenReset = true
+                showingTokenInput = false
+            } else {
+                showingTokenInput = true
+                showingTokenReset = false
+            }
+        }
+    }
+
+    func showTokenReset() {
+        withAnimation {
             showingTokenInput = true
+            showingTokenReset = false
+            tokenInput = ""
         }
     }
 
@@ -82,6 +97,7 @@ final class UsageViewModel: ObservableObject {
         ConfigService.shared.token = trimmedToken
         isConfigured = true
         showingTokenInput = false
+        showingTokenReset = false
         tokenInput = ""
 
         Task {
@@ -90,7 +106,16 @@ final class UsageViewModel: ObservableObject {
     }
 
     func cancelTokenInput() {
+        withAnimation {
+            showingTokenInput = false
+            showingTokenReset = false
+            tokenInput = ""
+        }
+    }
+
+    func resetToUsageView() {
         showingTokenInput = false
+        showingTokenReset = false
         tokenInput = ""
     }
 
