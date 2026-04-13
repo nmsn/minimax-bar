@@ -26,17 +26,9 @@ A macOS menu bar app displaying MiniMax API usage statistics.
 
 ## Installation
 
-### Homebrew
-
-```bash
-brew install --cask minimax-bar
-```
-
-### Manual Installation
-
 1. Download the latest `.dmg` from [Releases](https://github.com/nmsn/minimax-bar/releases)
 2. Double-click to open the DMG
-3. Drag `minimax-bar` into Applications folder
+3. Drag `minimax-bar` into the Applications folder
 4. On first run, right-click the app and select "Open"
 
 ## Usage

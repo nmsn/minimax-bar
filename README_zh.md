@@ -26,14 +26,6 @@ macOS 菜单栏应用，用于展示 MiniMax API 使用量。
 
 ## 安装
 
-### Homebrew
-
-```bash
-brew install --cask minimax-bar
-```
-
-### 手动安装
-
 1. 从 [Releases](https://github.com/nmsn/minimax-bar/releases) 下载最新版本 `.dmg` 文件
 2. 双击打开 DMG
 3. 将 `minimax-bar` 拖入 Applications 文件夹
