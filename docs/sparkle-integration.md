@@ -1,4 +1,4 @@
-# MiniMaxBar Sparkle 更新集成文档
+# minimax-bar Sparkle 更新集成文档
 
 ## 密钥信息
 
@@ -12,21 +12,21 @@
 ### 1. 构建 Release 版本
 
 ```bash
-xcodebuild -project MiniMaxBar.xcodeproj -scheme MiniMaxBar -configuration Release build
+xcodebuild -project minimax-bar.xcodeproj -scheme minimax-bar -configuration Release build
 ```
 
 ### 2. 打包为 .dmg 格式
 
 使用 `Disk Utility` 或命令行创建 .dmg：
 ```bash
-hdiutil create -volname MiniMaxBar -srcfolder build/Release/MiniMaxBar.app -ov -format UDZO MiniMaxBar.dmg
+hdiutil create -volname minimax-bar -srcfolder build/Release/minimax-bar.app -ov -format UDZO minimax-bar.dmg
 ```
 
 ### 3. 对 .dmg 进行签名（可选但推荐）
 
 使用 Developer ID 签名：
 ```bash
-codesign --force --sign "Developer ID Application: YOUR_NAME" --deep MiniMaxBar.dmg
+codesign --force --sign "Developer ID Application: YOUR_NAME" --deep minimax-bar.dmg
 ```
 
 ### 4. 创建 GitHub Release
@@ -45,13 +45,13 @@ codesign --force --sign "Developer ID Application: YOUR_NAME" --deep MiniMaxBar.
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
   <channel>
-    <title>MiniMaxBar Updates</title>
-    <link>https://你的用户名.github.io/MiniMaxBar/appcast.xml</link>
+    <title>minimax-bar Updates</title>
+    <link>https://你的用户名.github.io/minimax-bar/appcast.xml</link>
     <item>
       <title>Version 1.0.1</title>
-      <sparkle:releaseNotesLink>https://你的用户名.github.io/MiniMaxBar/notes.html</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>https://你的用户名.github.io/minimax-bar/notes.html</sparkle:releaseNotesLink>
       <pubDate>Mon, 13 Apr 2026 12:00:00 +0800</pubDate>
-      <enclosure url="https://github.com/你的用户名/MiniMaxBar/releases/download/v1.0.1/MiniMaxBar.dmg" sparkle:version="1.0.1" length="1234567" type="application/octet-stream"/>
+      <enclosure url="https://github.com/你的用户名/minimax-bar/releases/download/v1.0.1/minimax-bar.dmg" sparkle:version="1.0.1" length="1234567" type="application/octet-stream"/>
     </item>
   </channel>
 </rss>
@@ -62,7 +62,7 @@ codesign --force --sign "Developer ID Application: YOUR_NAME" --deep MiniMaxBar.
 ```yaml
 settings:
   base:
-    SUAppcastURL: "https://你的用户名.github.io/MiniMaxBar/appcast.xml"
+    SUAppcastURL: "https://你的用户名.github.io/minimax-bar/appcast.xml"
 ```
 ```
 
@@ -70,7 +70,7 @@ settings:
 
 ```bash
 # 路径可能在 DerivedData 中
-~/Library/Developer/Xcode/DerivedData/MiniMaxBar-*/SourcePackages/artifacts/sparkle/Sparkle/bin/generate_keys
+~/Library/Developer/Xcode/DerivedData/minimax-bar-*/SourcePackages/artifacts/sparkle/Sparkle/bin/generate_keys
 ```
 
 ## 相关文件
