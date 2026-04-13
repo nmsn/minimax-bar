@@ -3,8 +3,9 @@
 ## 密钥信息
 
 - **EdDSA 公钥**: `8n6qpNCw5nnChaXomz88SKWPaYUXfvSo8P9fMpq/6hs=`
-- **密钥位置**: Mac Keychain 中
-- **警告**: 私钥删除后无法解密更新，务必妥善保管
+  - 此公钥可公开（无安全风险），用于验证更新签名的合法性
+- **私钥位置**: Mac Keychain 中（与公钥配对）
+- **警告**: 私钥一旦删除将无法解密已有更新，务必妥善保管
 
 ## 发布更新步骤
 
@@ -62,6 +63,7 @@ codesign --force --sign "Developer ID Application: YOUR_NAME" --deep MiniMaxBar.
 settings:
   base:
     SUAppcastURL: "https://你的用户名.github.io/MiniMaxBar/appcast.xml"
+```
 ```
 
 ## Sparkle 密钥生成（如果需要重新生成）
