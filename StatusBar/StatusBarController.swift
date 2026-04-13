@@ -9,6 +9,7 @@ class StatusBarController {
     private var hostingView: NSHostingView<StatusBarView>
     private let viewModel: UsageViewModel
     private var popover: NSPopover?
+    private var clickMonitor: Any?
 
     init(viewModel: UsageViewModel) {
         self.viewModel = viewModel
@@ -46,12 +47,36 @@ class StatusBarController {
         button.target = self
     }
 
+    private func setupClickMonitor() {
+        removeClickMonitor()
+        clickMonitor = NSEvent.addGlobalMonitorForEvents(matching: .leftMouseDown) { [weak self] _ in
+            Task { @MainActor [weak self] in
+                self?.closePopoverIfNeeded()
+            }
+        }
+    }
+
+    private func removeClickMonitor() {
+        if let monitor = clickMonitor {
+            NSEvent.removeMonitor(monitor)
+            clickMonitor = nil
+        }
+    }
+
+    private func closePopoverIfNeeded() {
+        guard let popover = popover, popover.isShown else { return }
+        popover.performClose(nil)
+        self.popover = nil
+        removeClickMonitor()
+    }
+
     @objc private func statusItemClicked(_ sender: Any?) {
         guard let button = statusItem.button else { return }
 
         if let existingPopover = popover, existingPopover.isShown {
             existingPopover.performClose(sender)
             popover = nil
+            removeClickMonitor()
             return
         }
 
@@ -67,6 +92,7 @@ class StatusBarController {
         }
 
         popover = newPopover
+        setupClickMonitor()
     }
 
     func update(usageData: UsageData?) {
