@@ -29,17 +29,21 @@ struct StatusBarView: View {
         HStack(spacing: 2) {
             Image(systemName: "circle.fill")
                 .font(.system(size: 12))
+                .frame(width: 12)
                 .foregroundColor(statusColor)
 
             VStack(alignment: .leading, spacing: 0) {
                 Text(dailyPercent)
                     .font(.system(size: 9, weight: .medium, design: .monospaced))
+                    .lineLimit(1)
                 Text(weeklyPercent)
                     .font(.system(size: 9, weight: .medium, design: .monospaced))
+                    .lineLimit(1)
             }
+            .frame(maxWidth: .infinity)
         }
         .padding(.horizontal, 4)
-        .frame(width: 36, height: 22, alignment: .leading)
+        .frame(width: 40, height: 22, alignment: .leading)
     }
 }
 

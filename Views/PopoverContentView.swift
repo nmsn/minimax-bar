@@ -49,10 +49,12 @@ struct PopoverContentView: View {
         VStack(spacing: 12) {
             HStack {
                 Spacer()
-                Button("获取 Token") {
+                Button(action: {
                     if let url = URL(string: "https://platform.minimaxi.com/user-center/payment/coding-plan") {
                         NSWorkspace.shared.open(url)
                     }
+                }) {
+                    Image(systemName: "arrow.up.right.square")
                 }
                 .buttonStyle(.bordered)
             }
@@ -64,13 +66,17 @@ struct PopoverContentView: View {
                 .frame(height: 60)
 
             HStack {
-                Button("取消") {
+                Button(action: {
                     viewModel.resetToUsageView()
+                }) {
+                    Image(systemName: "xmark")
                 }
                 .buttonStyle(.bordered)
 
-                Button("保存") {
+                Button(action: {
                     viewModel.saveToken()
+                }) {
+                    Image(systemName: "checkmark")
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(viewModel.tokenInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
@@ -87,8 +93,10 @@ struct PopoverContentView: View {
                 .font(.subheadline.bold())
                 .foregroundColor(.green)
 
-            Button("重置 Token") {
+            Button(action: {
                 viewModel.showTokenReset()
+            }) {
+                Image(systemName: "arrow.counterclockwise")
             }
             .buttonStyle(.bordered)
         }
@@ -221,11 +229,10 @@ struct PopoverContentView: View {
     }
 
     private var footerSection: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 8) {
             if viewModel.showingTokenInput || viewModel.showingTokenReset {
                 Button(action: { viewModel.resetToUsageView() }) {
-                    Label("返回", systemImage: "chevron.left")
-                        .font(.caption)
+                    Image(systemName: "chevron.left")
                 }
                 .buttonStyle(.bordered)
             } else {
@@ -234,24 +241,19 @@ struct PopoverContentView: View {
                         await viewModel.refresh()
                     }
                 }) {
-                    Label("刷新", systemImage: "arrow.clockwise")
-                        .font(.caption)
+                    Image(systemName: "arrow.clockwise")
                 }
                 .buttonStyle(.bordered)
 
                 Button(action: {
                     UpdateService.shared.checkForUpdates()
                 }) {
-                    Label("检查更新", systemImage: "arrow.down.circle")
-                        .font(.caption)
+                    Image(systemName: "arrow.down.circle")
                 }
                 .buttonStyle(.bordered)
 
-                Spacer()
-
                 Button(action: { viewModel.toggleTokenInput() }) {
-                    Label("设置 Token", systemImage: "gear")
-                        .font(.caption)
+                    Image(systemName: "gear")
                 }
                 .buttonStyle(.bordered)
             }
@@ -259,8 +261,7 @@ struct PopoverContentView: View {
             Spacer()
 
             Button(action: { NSApplication.shared.terminate(nil) }) {
-                Label("退出", systemImage: "power")
-                    .font(.caption)
+                Image(systemName: "power")
             }
             .buttonStyle(.bordered)
         }
