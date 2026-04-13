@@ -11,7 +11,7 @@ protocol UsageViewModelDelegate: AnyObject {
 final class UsageViewModel: ObservableObject {
     var usageData: UsageData?
     var errorMessage: String?
-    var isLoading: Bool = false
+    @Published var isLoading: Bool = false
     @Published var isConfigured: Bool = false
     @Published var showingTokenInput: Bool = false
     @Published var showingTokenReset: Bool = false

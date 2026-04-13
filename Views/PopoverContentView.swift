@@ -1,7 +1,5 @@
 import SwiftUI
 
-import Sparkle
-
 struct PopoverContentView: View {
     @ObservedObject var viewModel: UsageViewModel
 
@@ -40,7 +38,10 @@ struct PopoverContentView: View {
                 .font(.headline)
             Spacer()
             if viewModel.isLoading {
-                ProgressView()
+                Image(systemName: "arrow.clockwise")
+                    .font(.system(size: 12))
+                    .rotationEffect(.degrees(viewModel.isLoading ? 360 : 0))
+                    .animation(.linear(duration: 1).repeatForever(autoreverses: false), value: viewModel.isLoading)
             }
         }
     }
@@ -123,11 +124,6 @@ struct PopoverContentView: View {
 
     private var usageSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("当前模型: \(viewModel.usageData?.modelName ?? "Unknown")")
-                .font(.subheadline)
-
-            Divider()
-
             dailySection
             weeklySection
 
@@ -208,7 +204,7 @@ struct PopoverContentView: View {
     private var loadingSection: some View {
         VStack {
             Spacer()
-            ProgressView("加载中...")
+            ProgressView()
             Spacer()
         }
         .frame(maxWidth: .infinity)
@@ -245,13 +241,6 @@ struct PopoverContentView: View {
                 }
                 .buttonStyle(.bordered)
 
-                Button(action: {
-                    UpdateService.shared.checkForUpdates()
-                }) {
-                    Image(systemName: "arrow.down.circle")
-                }
-                .buttonStyle(.bordered)
-
                 Button(action: { viewModel.toggleTokenInput() }) {
                     Image(systemName: "gear")
                 }
@@ -259,11 +248,6 @@ struct PopoverContentView: View {
             }
 
             Spacer()
-
-            Button(action: { NSApplication.shared.terminate(nil) }) {
-                Image(systemName: "power")
-            }
-            .buttonStyle(.bordered)
         }
         .padding(.vertical, 4)
     }

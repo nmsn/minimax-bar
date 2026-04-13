@@ -6,7 +6,7 @@ class StatusBarController {
     private static let minimumItemWidth: CGFloat = 40
 
     private var statusItem: NSStatusItem
-    private var hostingView: NSHostingView<StatusBarView>
+    private var statusBarView: RightClickStatusBarView
     private let viewModel: UsageViewModel
     private var popover: NSPopover?
     private var clickMonitor: Any?
@@ -16,35 +16,37 @@ class StatusBarController {
 
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
 
-        let statusBarView = StatusBarView(usageData: viewModel.usageData)
-        hostingView = NSHostingView(rootView: statusBarView)
-        hostingView.translatesAutoresizingMaskIntoConstraints = false
-        hostingView.setContentHuggingPriority(.required, for: .horizontal)
-        hostingView.setContentCompressionResistancePriority(.required, for: .horizontal)
+        let statusBarContentView = StatusBarView(usageData: viewModel.usageData)
+        statusBarView = RightClickStatusBarView(rootView: statusBarContentView)
 
         guard let button = statusItem.button else {
             return
         }
 
         button.frame.size.height = NSStatusBar.system.thickness
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addSubview(hostingView)
+        statusBarView.translatesAutoresizingMaskIntoConstraints = false
+        button.addSubview(statusBarView)
         NSLayoutConstraint.activate([
-            hostingView.leadingAnchor.constraint(equalTo: button.leadingAnchor),
-            hostingView.trailingAnchor.constraint(equalTo: button.trailingAnchor),
-            hostingView.topAnchor.constraint(equalTo: button.topAnchor),
-            hostingView.bottomAnchor.constraint(equalTo: button.bottomAnchor),
-            hostingView.centerYAnchor.constraint(equalTo: button.centerYAnchor)
+            statusBarView.leadingAnchor.constraint(equalTo: button.leadingAnchor),
+            statusBarView.trailingAnchor.constraint(equalTo: button.trailingAnchor),
+            statusBarView.topAnchor.constraint(equalTo: button.topAnchor),
+            statusBarView.bottomAnchor.constraint(equalTo: button.bottomAnchor)
         ])
-        hostingView.layoutSubtreeIfNeeded()
+
+        statusBarView.onLeftClick = { [weak self] in
+            self?.statusItemClicked()
+        }
+
+        statusBarView.onRightClick = { [weak self] in
+            self?.showContextMenu()
+        }
+
+        statusBarView.layoutSubtreeIfNeeded()
         let fittedWidth = max(
             StatusBarController.minimumItemWidth,
-            ceil(hostingView.fittingSize.width)
+            ceil(statusBarView.fittingSize.width)
         )
         statusItem.length = fittedWidth
-
-        button.action = #selector(statusItemClicked(_:))
-        button.target = self
     }
 
     private func setupClickMonitor() {
@@ -70,11 +72,11 @@ class StatusBarController {
         removeClickMonitor()
     }
 
-    @objc private func statusItemClicked(_ sender: Any?) {
+    private func statusItemClicked() {
         guard let button = statusItem.button else { return }
 
         if let existingPopover = popover, existingPopover.isShown {
-            existingPopover.performClose(sender)
+            existingPopover.performClose(nil)
             popover = nil
             removeClickMonitor()
             return
@@ -95,12 +97,40 @@ class StatusBarController {
         setupClickMonitor()
     }
 
+    private func showContextMenu() {
+        closePopoverIfNeeded()
+
+        let menu = NSMenu()
+
+        let checkUpdateItem = NSMenuItem(title: "检查更新", action: #selector(checkUpdateAction), keyEquivalent: "")
+        checkUpdateItem.target = self
+        menu.addItem(checkUpdateItem)
+
+        menu.addItem(NSMenuItem.separator())
+
+        let quitItem = NSMenuItem(title: "退出", action: #selector(quitAction), keyEquivalent: "q")
+        quitItem.target = self
+        menu.addItem(quitItem)
+
+        statusItem.menu = menu
+        statusItem.button?.performClick(nil)
+        statusItem.menu = nil
+    }
+
+    @objc private func checkUpdateAction() {
+        UpdateService.shared.checkForUpdates()
+    }
+
+    @objc private func quitAction() {
+        NSApplication.shared.terminate(nil)
+    }
+
     func update(usageData: UsageData?) {
-        hostingView.rootView = StatusBarView(usageData: usageData)
-        hostingView.layoutSubtreeIfNeeded()
+        statusBarView.update(rootView: StatusBarView(usageData: usageData))
+        statusBarView.layoutSubtreeIfNeeded()
         statusItem.length = max(
             StatusBarController.minimumItemWidth,
-            ceil(hostingView.fittingSize.width)
+            ceil(statusBarView.fittingSize.width)
         )
     }
 }
