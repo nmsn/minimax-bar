@@ -46,10 +46,6 @@ struct PopoverContentView: View {
     private var tokenInputSection: some View {
         VStack(spacing: 12) {
             HStack {
-                Button("返回") {
-                    viewModel.resetToUsageView()
-                }
-                .buttonStyle(.bordered)
                 Spacer()
                 Button("获取 Token") {
                     if let url = URL(string: "https://platform.minimaxi.com/user-center/payment/coding-plan") {
@@ -85,14 +81,6 @@ struct PopoverContentView: View {
 
     private var tokenResetSection: some View {
         VStack(spacing: 16) {
-            HStack {
-                Button("返回") {
-                    viewModel.resetToUsageView()
-                }
-                .buttonStyle(.bordered)
-                Spacer()
-            }
-
             Label("Token 已配置", systemImage: "checkmark.circle.fill")
                 .font(.subheadline.bold())
                 .foregroundColor(.green)
@@ -232,19 +220,25 @@ struct PopoverContentView: View {
 
     private var footerSection: some View {
         HStack(spacing: 12) {
-            Button(action: {
-                Task {
-                    await viewModel.refresh()
+            if viewModel.showingTokenInput || viewModel.showingTokenReset {
+                Button(action: { viewModel.resetToUsageView() }) {
+                    Label("返回", systemImage: "chevron.left")
+                        .font(.caption)
                 }
-            }) {
-                Label("刷新", systemImage: "arrow.clockwise")
-                    .font(.caption)
-            }
-            .buttonStyle(.bordered)
+                .buttonStyle(.bordered)
+            } else {
+                Button(action: {
+                    Task {
+                        await viewModel.refresh()
+                    }
+                }) {
+                    Label("刷新", systemImage: "arrow.clockwise")
+                        .font(.caption)
+                }
+                .buttonStyle(.bordered)
 
-            Spacer()
+                Spacer()
 
-            if !viewModel.showingTokenInput {
                 Button(action: { viewModel.toggleTokenInput() }) {
                     Label("设置 Token", systemImage: "gear")
                         .font(.caption)
