@@ -74,8 +74,8 @@ struct APIResponse: Codable {
 
 struct ModelRemain: Codable {
     let modelName: String?
-    let startTime: String?
-    let endTime: String?
+    let startTime: Int?
+    let endTime: Int?
     let remainsTime: Int?
     let currentIntervalUsageCount: Int?
     let currentIntervalTotalCount: Int?

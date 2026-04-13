@@ -56,10 +56,16 @@ class StatusBarController {
         }
 
         let popoverContentView = PopoverContentView(viewModel: viewModel)
+        let hostingController = NSHostingController(rootView: popoverContentView)
         let newPopover = NSPopover()
-        newPopover.contentViewController = NSHostingController(rootView: popoverContentView)
+        newPopover.contentViewController = hostingController
         newPopover.behavior = .applicationDefined
         newPopover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
+
+        DispatchQueue.main.async {
+            hostingController.view.window?.makeFirstResponder(hostingController.view)
+        }
+
         popover = newPopover
     }
 

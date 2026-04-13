@@ -65,10 +65,22 @@ final class MiniMaxAPIService {
         }
 
         guard httpResponse.statusCode == 200 else {
-            throw APIError.networkError("HTTP \(httpResponse.statusCode)")
+            let responseString = String(data: data, encoding: .utf8) ?? "unable to decode"
+            throw APIError.networkError("HTTP \(httpResponse.statusCode): \(responseString.prefix(200))")
         }
 
-        let apiResponse = try JSONDecoder().decode(APIResponse.self, from: data)
+        // Debug: print raw response
+        let responseString = String(data: data, encoding: .utf8) ?? "unable to decode"
+        print("[API] Raw response length: \(responseString.count)")
+        print("[API] Raw response: \(responseString)")
+
+        let apiResponse: APIResponse
+        do {
+            apiResponse = try JSONDecoder().decode(APIResponse.self, from: data)
+        } catch {
+            print("[API] JSON decode error: \(error)")
+            throw APIError.invalidResponse
+        }
 
         guard let modelData = apiResponse.modelRemains?.first else {
             throw APIError.invalidResponse

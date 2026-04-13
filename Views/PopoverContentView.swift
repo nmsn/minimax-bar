@@ -51,8 +51,8 @@ struct PopoverContentView: View {
                 .font(.caption2)
                 .foregroundColor(.blue)
 
-            TextField("输入你的 Token", text: $viewModel.tokenInput)
-                .textFieldStyle(.roundedBorder)
+            PasteableTextField(text: $viewModel.tokenInput, placeholder: "输入你的 Token")
+                .frame(height: 24)
 
             HStack {
                 Button("取消") {

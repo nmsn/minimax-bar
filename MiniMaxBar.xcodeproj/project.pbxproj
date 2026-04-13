@@ -14,12 +14,14 @@
 		7E0BC1CF9AA16D75CE3F9F8B /* UsageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC05F536332F93CECD941E9 /* UsageViewModel.swift */; };
 		8886DD2876982EA364CCA4EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9B58FB30967FE6755B2110 /* AppDelegate.swift */; };
 		8A82AE2ACB637FFB8F21517F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9822F5F485DEE7A633E81FD9 /* Assets.xcassets */; };
+		B7DEAB9169419C55E05E4B94 /* PasteableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0444755A70B681CB3DFAE315 /* PasteableTextField.swift */; };
 		C7346CF0E915F06BCF44CAA8 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2774C9D87F27454F58AA33D /* main.swift */; };
 		E75F248FA702D76BDBA0633A /* StatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B5C81B96DE090713FB96BC /* StatusBarView.swift */; };
 		F56BAE663774DAE7DCED3498 /* MiniMaxAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC067E4ECB394551BF3A7D81 /* MiniMaxAPIService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0444755A70B681CB3DFAE315 /* PasteableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteableTextField.swift; sourceTree = "<group>"; };
 		36CE95E9B407987099519275 /* StatusBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarController.swift; sourceTree = "<group>"; };
 		4C9BA1D9CCFD148BB268BCED /* UsageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageData.swift; sourceTree = "<group>"; };
 		72564395C40F7134880B4952 /* ConfigService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigService.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 		C7519ED2CECF8CB3D06569AD /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0444755A70B681CB3DFAE315 /* PasteableTextField.swift */,
 				DF42BE07546895634536AB76 /* PopoverContentView.swift */,
 				F5B5C81B96DE090713FB96BC /* StatusBarView.swift */,
 			);
@@ -185,6 +188,7 @@
 				8886DD2876982EA364CCA4EC /* AppDelegate.swift in Sources */,
 				183855E1E92187B546181890 /* ConfigService.swift in Sources */,
 				F56BAE663774DAE7DCED3498 /* MiniMaxAPIService.swift in Sources */,
+				B7DEAB9169419C55E05E4B94 /* PasteableTextField.swift in Sources */,
 				1681FB3615CDA5A2AE1B6974 /* PopoverContentView.swift in Sources */,
 				5B43B7BF8E58115C586CCC98 /* StatusBarController.swift in Sources */,
 				E75F248FA702D76BDBA0633A /* StatusBarView.swift in Sources */,
