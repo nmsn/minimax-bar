@@ -183,7 +183,10 @@ class StatusBarController {
     }
 
     func update(usageData: UsageData?) {
-        statusBarView.update(rootView: StatusBarView(usageData: usageData))
+        statusBarView.update(rootView: StatusBarView(
+            usageData: usageData,
+            displayMode: ConfigService.shared.displayMode
+        ))
         statusBarView.layoutSubtreeIfNeeded()
         statusItem.length = max(
             StatusBarController.minimumItemWidth,
