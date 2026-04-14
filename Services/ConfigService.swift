@@ -1,11 +1,17 @@
 import Foundation
 
+enum DisplayMode: String, Codable {
+    case used
+    case remaining
+}
+
 final class ConfigService {
     static let shared = ConfigService()
 
     private let configPath: URL
     private var cachedToken: String?
     private var cachedGroupId: String?
+    private var cachedDisplayMode: DisplayMode = .used
 
     private init() {
         let home = FileManager.default.homeDirectoryForCurrentUser
@@ -29,6 +35,14 @@ final class ConfigService {
         }
     }
 
+    var displayMode: DisplayMode {
+        get { cachedDisplayMode }
+        set {
+            cachedDisplayMode = newValue
+            saveConfig()
+        }
+    }
+
     var isConfigured: Bool {
         cachedToken != nil
     }
@@ -41,6 +55,10 @@ final class ConfigService {
             if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
                 cachedToken = json["token"] as? String
                 cachedGroupId = json["groupId"] as? String
+                if let modeString = json["displayMode"] as? String,
+                   let mode = DisplayMode(rawValue: modeString) {
+                    cachedDisplayMode = mode
+                }
             }
         } catch {
             // Ignore load errors, use defaults
@@ -55,6 +73,7 @@ final class ConfigService {
         if let groupId = cachedGroupId {
             json["groupId"] = groupId
         }
+        json["displayMode"] = cachedDisplayMode.rawValue
 
         do {
             let data = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)

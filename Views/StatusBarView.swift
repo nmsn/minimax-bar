@@ -2,15 +2,30 @@ import SwiftUI
 
 struct StatusBarView: View {
     let usageData: UsageData?
+    var displayMode: DisplayMode = .used
 
     private var dailyPercent: String {
         guard let data = usageData else { return "70%" }
-        return "\(Int(data.dailyUsedPercentage * 100))%"
+        let percentage: Double
+        switch displayMode {
+        case .used:
+            percentage = data.dailyUsedPercentage
+        case .remaining:
+            percentage = 1.0 - data.dailyUsedPercentage
+        }
+        return "\(Int(percentage * 100))%"
     }
 
     private var weeklyPercent: String {
         guard let data = usageData else { return "90%" }
-        return "\(Int(data.weeklyUsedPercentage * 100))%"
+        let percentage: Double
+        switch displayMode {
+        case .used:
+            percentage = data.weeklyUsedPercentage
+        case .remaining:
+            percentage = 1.0 - data.weeklyUsedPercentage
+        }
+        return "\(Int(percentage * 100))%"
     }
 
     private var statusColor: Color {
@@ -48,5 +63,5 @@ struct StatusBarView: View {
 }
 
 #Preview {
-    StatusBarView(usageData: nil)
+    StatusBarView(usageData: nil, displayMode: .used)
 }
