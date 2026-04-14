@@ -1,4 +1,4 @@
-# minimax-bar
+# MiniMaxBar
 
 ![macOS](https://img.shields.io/badge/macOS-14.0%2B-blue)
 ![Swift](https://img.shields.io/badge/Swift-5.9-orange)
@@ -28,7 +28,7 @@ A macOS menu bar app displaying MiniMax API usage statistics.
 
 1. Download the latest `.dmg` from [Releases](https://github.com/nmsn/minimax-bar/releases)
 2. Double-click to open the DMG
-3. Drag `minimax-bar` into the Applications folder
+3. Drag `MiniMaxBar` into the Applications folder
 4. On first run, right-click the app and select "Open"
 
 ## Usage
@@ -57,7 +57,7 @@ xcodebuild -project minimax-bar.xcodeproj -scheme minimax-bar -configuration Rel
 ### Package
 
 ```bash
-hdiutil create -volname minimax-bar -srcfolder build/Release/minimax-bar.app -ov -format UDZO -o minimax-bar.dmg
+hdiutil create -volname MiniMaxBar -srcfolder build/Release/MiniMaxBar.app -ov -format UDZO -o MiniMaxBar.dmg
 ```
 
 ## Tech Stack
