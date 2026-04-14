@@ -114,7 +114,7 @@ class StatusBarController {
         menu.addItem(remainingItem)
 
         // 主菜单项
-        let displaySettingsItem = NSMenuItem(title: "显示设置", action: "", keyEquivalent: "")
+        let displaySettingsItem = NSMenuItem(title: "显示设置", action: nil, keyEquivalent: "")
         displaySettingsItem.submenu = menu
 
         let rootMenu = NSMenu()
