@@ -1,4 +1,4 @@
-# minimax-bar
+# MiniMaxBar
 
 ![macOS](https://img.shields.io/badge/macOS-14.0%2B-blue)
 ![Swift](https://img.shields.io/badge/Swift-5.9-orange)
@@ -28,7 +28,7 @@ macOS 菜单栏应用，用于展示 MiniMax API 使用量。
 
 1. 从 [Releases](https://github.com/nmsn/minimax-bar/releases) 下载最新版本 `.dmg` 文件
 2. 双击打开 DMG
-3. 将 `minimax-bar` 拖入 Applications 文件夹
+3. 将 `MiniMaxBar` 拖入 Applications 文件夹
 4. 首次运行时，右键点击应用选择"打开"
 
 ## 使用
@@ -57,7 +57,7 @@ xcodebuild -project minimax-bar.xcodeproj -scheme minimax-bar -configuration Rel
 ### 打包
 
 ```bash
-hdiutil create -volname minimax-bar -srcfolder build/Release/minimax-bar.app -ov -format UDZO -o minimax-bar.dmg
+hdiutil create -volname MiniMaxBar -srcfolder build/Release/MiniMaxBar.app -ov -format UDZO -o MiniMaxBar.dmg
 ```
 
 ## 技术栈
