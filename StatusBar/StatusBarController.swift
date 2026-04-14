@@ -38,7 +38,7 @@ class StatusBarController {
         }
 
         statusBarView.onRightClick = { [weak self] in
-            self?.showContextMenu()
+            self?.showDisplaySettingsSubmenu()
         }
 
         statusBarView.layoutSubtreeIfNeeded()
@@ -95,6 +95,63 @@ class StatusBarController {
 
         popover = newPopover
         setupClickMonitor()
+    }
+
+    private func showDisplaySettingsSubmenu() {
+        closePopoverIfNeeded()
+
+        let menu = NSMenu()
+
+        // 子菜单项
+        let usedItem = NSMenuItem(title: "显示已使用", action: #selector(setDisplayModeUsed), keyEquivalent: "")
+        usedItem.target = self
+        usedItem.state = ConfigService.shared.displayMode == .used ? .on : .off
+        menu.addItem(usedItem)
+
+        let remainingItem = NSMenuItem(title: "显示剩余", action: #selector(setDisplayModeRemaining), keyEquivalent: "")
+        remainingItem.target = self
+        remainingItem.state = ConfigService.shared.displayMode == .remaining ? .on : .off
+        menu.addItem(remainingItem)
+
+        // 主菜单项
+        let displaySettingsItem = NSMenuItem(title: "显示设置", action: "", keyEquivalent: "")
+        displaySettingsItem.submenu = menu
+
+        let rootMenu = NSMenu()
+        rootMenu.addItem(displaySettingsItem)
+        rootMenu.addItem(NSMenuItem.separator())
+
+        let checkUpdateItem = NSMenuItem(title: "检查更新", action: #selector(checkUpdateAction), keyEquivalent: "")
+        checkUpdateItem.target = self
+        rootMenu.addItem(checkUpdateItem)
+
+        rootMenu.addItem(NSMenuItem.separator())
+
+        let quitItem = NSMenuItem(title: "退出", action: #selector(quitAction), keyEquivalent: "q")
+        quitItem.target = self
+        rootMenu.addItem(quitItem)
+
+        statusItem.menu = rootMenu
+        statusItem.button?.performClick(nil)
+        statusItem.menu = nil
+    }
+
+    @objc private func setDisplayModeUsed() {
+        ConfigService.shared.displayMode = .used
+        updateStatusBarView()
+    }
+
+    @objc private func setDisplayModeRemaining() {
+        ConfigService.shared.displayMode = .remaining
+        updateStatusBarView()
+    }
+
+    private func updateStatusBarView() {
+        statusBarView.update(rootView: StatusBarView(
+            usageData: viewModel.usageData,
+            displayMode: ConfigService.shared.displayMode
+        ))
+        statusBarView.layoutSubtreeIfNeeded()
     }
 
     private func showContextMenu() {
