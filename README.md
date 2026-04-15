@@ -1,5 +1,7 @@
 # MiniMaxBar
 
+English | [中文](./README_zh.md)
+
 ![macOS](https://img.shields.io/badge/macOS-14.0%2B-blue)
 ![Swift](https://img.shields.io/badge/Swift-5.9-orange)
 ![License](https://img.shields.io/badge/License-MIT-green)
