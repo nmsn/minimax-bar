@@ -39,9 +39,10 @@ struct UsageData {
         let hours = dailyResetMs / (1000 * 60 * 60)
         let minutes = (dailyResetMs % (1000 * 60 * 60)) / (1000 * 60)
         if hours > 0 {
-            return "还剩\(hours)小时\(minutes)分"
+            let template = I18nService.shared.translate("daily.reset.remaining")
+            return String(format: template, hours, minutes)
         } else {
-            return "还剩\(minutes)分"
+            return I18nService.shared.translate("daily.reset.minutesonly")
         }
     }
 
@@ -49,17 +50,19 @@ struct UsageData {
         let days = dailyResetMs / (1000 * 60 * 60 * 24)
         let hours = (dailyResetMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
         if days > 0 {
-            return "\(days)天\(hours)小时后重置"
+            let template = I18nService.shared.translate("weekly.reset.remaining")
+            return String(format: template, days, hours)
         } else {
-            return "\(hours)小时后重置"
+            let template = I18nService.shared.translate("weekly.reset.hours")
+            return String(format: template, hours)
         }
     }
 
     var statusText: String {
         switch statusColor {
-        case "red": return "⚠️ 使用量紧张"
-        case "yellow": return "⚡ 注意使用"
-        default: return "✓ 正常使用"
+        case "red": return "⚠️ " + I18nService.shared.translate("status.critical")
+        case "yellow": return "⚡ " + I18nService.shared.translate("status.warning")
+        default: return "✓ " + I18nService.shared.translate("status.healthy")
         }
     }
 }

@@ -103,31 +103,50 @@ class StatusBarController {
         let menu = NSMenu()
 
         // 子菜单项
-        let usedItem = NSMenuItem(title: "显示已使用", action: #selector(setDisplayModeUsed), keyEquivalent: "")
+        let usedItem = NSMenuItem(title: I18nService.shared.translate("menu.showUsed"), action: #selector(setDisplayModeUsed), keyEquivalent: "")
         usedItem.target = self
         usedItem.state = ConfigService.shared.displayMode == .used ? .on : .off
         menu.addItem(usedItem)
 
-        let remainingItem = NSMenuItem(title: "显示剩余", action: #selector(setDisplayModeRemaining), keyEquivalent: "")
+        let remainingItem = NSMenuItem(title: I18nService.shared.translate("menu.showRemaining"), action: #selector(setDisplayModeRemaining), keyEquivalent: "")
         remainingItem.target = self
         remainingItem.state = ConfigService.shared.displayMode == .remaining ? .on : .off
         menu.addItem(remainingItem)
 
+        menu.addItem(NSMenuItem.separator())
+
+        // 语言子菜单
+        let languageMenu = NSMenu()
+        let isEnglish = I18nService.shared.currentLocale == "en"
+        let englishItem = NSMenuItem(title: I18nService.shared.translate("menu.lang.en"), action: #selector(setLanguageEnglish), keyEquivalent: "")
+        englishItem.target = self
+        englishItem.state = isEnglish ? .on : .off
+        languageMenu.addItem(englishItem)
+
+        let chineseItem = NSMenuItem(title: I18nService.shared.translate("menu.lang.zh"), action: #selector(setLanguageChinese), keyEquivalent: "")
+        chineseItem.target = self
+        chineseItem.state = !isEnglish ? .on : .off
+        languageMenu.addItem(chineseItem)
+
+        let languageItem = NSMenuItem(title: I18nService.shared.translate("menu.language"), action: nil, keyEquivalent: "")
+        languageItem.submenu = languageMenu
+        menu.addItem(languageItem)
+
         // 主菜单项
-        let displaySettingsItem = NSMenuItem(title: "显示设置", action: nil, keyEquivalent: "")
+        let displaySettingsItem = NSMenuItem(title: I18nService.shared.translate("menu.displaySettings"), action: nil, keyEquivalent: "")
         displaySettingsItem.submenu = menu
 
         let rootMenu = NSMenu()
         rootMenu.addItem(displaySettingsItem)
         rootMenu.addItem(NSMenuItem.separator())
 
-        let checkUpdateItem = NSMenuItem(title: "检查更新", action: #selector(checkUpdateAction), keyEquivalent: "")
+        let checkUpdateItem = NSMenuItem(title: I18nService.shared.translate("menu.checkUpdate"), action: #selector(checkUpdateAction), keyEquivalent: "")
         checkUpdateItem.target = self
         rootMenu.addItem(checkUpdateItem)
 
         rootMenu.addItem(NSMenuItem.separator())
 
-        let quitItem = NSMenuItem(title: "退出", action: #selector(quitAction), keyEquivalent: "q")
+        let quitItem = NSMenuItem(title: I18nService.shared.translate("menu.quit"), action: #selector(quitAction), keyEquivalent: "q")
         quitItem.target = self
         rootMenu.addItem(quitItem)
 
@@ -146,6 +165,16 @@ class StatusBarController {
         updateStatusBarView()
     }
 
+    @objc private func setLanguageEnglish() {
+        I18nService.shared.setLocale("en")
+        updateStatusBarView()
+    }
+
+    @objc private func setLanguageChinese() {
+        I18nService.shared.setLocale("zh-Hans")
+        updateStatusBarView()
+    }
+
     private func updateStatusBarView() {
         statusBarView.update(rootView: StatusBarView(
             usageData: viewModel.usageData,
@@ -159,13 +188,13 @@ class StatusBarController {
 
         let menu = NSMenu()
 
-        let checkUpdateItem = NSMenuItem(title: "检查更新", action: #selector(checkUpdateAction), keyEquivalent: "")
+        let checkUpdateItem = NSMenuItem(title: I18nService.shared.translate("menu.checkUpdate"), action: #selector(checkUpdateAction), keyEquivalent: "")
         checkUpdateItem.target = self
         menu.addItem(checkUpdateItem)
 
         menu.addItem(NSMenuItem.separator())
 
-        let quitItem = NSMenuItem(title: "退出", action: #selector(quitAction), keyEquivalent: "q")
+        let quitItem = NSMenuItem(title: I18nService.shared.translate("menu.quit"), action: #selector(quitAction), keyEquivalent: "q")
         quitItem.target = self
         menu.addItem(quitItem)
 
