@@ -166,7 +166,7 @@ struct PopoverContentView: View {
                 Spacer()
             }
 
-            Text("\(I18nService.shared.translate("popover.reset")): \(viewModel.usageData?.weeklyResetTime ?? "")")
+            Text("\(I18nService.shared.translate("popover.reset")): \(viewModel.usageData?.weeklyResetFormatted ?? "")")
                 .font(.caption)
                 .foregroundColor(.secondary)
         }

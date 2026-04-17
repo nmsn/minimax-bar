@@ -11,6 +11,7 @@ struct UsageData {
     let weeklyTotal: Int
     let weeklyPercentage: Double
     let weeklyResetTime: String
+    let weeklyResetMs: Int
     let expiryDate: Date?
     let isHealthy: Bool
 
@@ -47,8 +48,11 @@ struct UsageData {
     }
 
     var weeklyResetFormatted: String {
-        let days = dailyResetMs / (1000 * 60 * 60 * 24)
-        let hours = (dailyResetMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        if weeklyResetMs == 0 {
+            return I18nService.shared.translate("daily.reset.soon")
+        }
+        let days = weeklyResetMs / (1000 * 60 * 60 * 24)
+        let hours = (weeklyResetMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
         if days > 0 {
             let template = I18nService.shared.translate("weekly.reset.remaining")
             return String(format: template, days, hours)

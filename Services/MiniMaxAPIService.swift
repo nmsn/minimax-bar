@@ -91,6 +91,7 @@ final class MiniMaxAPIService {
         let weeklyPercentage = weeklyTotal > 0 ? Double(weeklyTotal - weeklyRemaining) / Double(weeklyTotal) : 0
 
         let resetMs = model.remainsTime ?? 0
+        let weeklyResetMsValue = model.weeklyRemainsTime ?? 0
 
         return UsageData(
             modelName: model.modelName ?? "MiniMax-M2",
@@ -103,6 +104,7 @@ final class MiniMaxAPIService {
             weeklyTotal: weeklyTotal,
             weeklyPercentage: weeklyPercentage,
             weeklyResetTime: "",
+            weeklyResetMs: weeklyResetMsValue,
             expiryDate: nil,
             isHealthy: dailyPercentage < 0.85
         )
