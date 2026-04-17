@@ -91,25 +91,18 @@ final class MiniMaxAPIService {
         let weeklyPercentage = weeklyTotal > 0 ? Double(weeklyTotal - weeklyRemaining) / Double(weeklyTotal) : 0
 
         let resetMs = model.remainsTime ?? 0
-        let hours = resetMs / (1000 * 60 * 60)
-        let minutes = (resetMs % (1000 * 60 * 60)) / (1000 * 60)
-
-        var resetTimeFormatted = "\(hours)小时\(minutes)分后重置"
-        if hours == 0 && minutes == 0 {
-            resetTimeFormatted = "即将重置"
-        }
 
         return UsageData(
             modelName: model.modelName ?? "MiniMax-M2",
             dailyRemaining: dailyRemaining,
             dailyTotal: dailyTotal,
             dailyPercentage: dailyPercentage,
-            dailyResetTime: resetTimeFormatted,
+            dailyResetTime: "",
             dailyResetMs: resetMs,
             weeklyRemaining: weeklyRemaining,
             weeklyTotal: weeklyTotal,
             weeklyPercentage: weeklyPercentage,
-            weeklyResetTime: "周日 00:00",
+            weeklyResetTime: "",
             expiryDate: nil,
             isHealthy: dailyPercentage < 0.85
         )

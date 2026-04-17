@@ -24,6 +24,7 @@
     "popover.low": "偏低",
     "daily.reset.remaining": "还剩%dh%d分",
     "daily.reset.minutesonly": "还剩%d分",
+    "daily.reset.soon": "即将重置",
     "weekly.reset.remaining": "%d天%d小时后重置",
     "weekly.reset.hours": "%d小时后重置",
     "status.critical": "使用量紧张",

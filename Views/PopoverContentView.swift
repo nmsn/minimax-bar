@@ -146,7 +146,7 @@ struct PopoverContentView: View {
                 Spacer()
             }
 
-            Text("\(I18nService.shared.translate("popover.reset")): \(viewModel.usageData?.dailyResetTime ?? "")")
+            Text(I18nService.shared.translate("popover.reset") + ": " + formatResetTime(viewModel.usageData?.dailyResetMs ?? 0))
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -250,5 +250,17 @@ struct PopoverContentView: View {
             Spacer()
         }
         .padding(.vertical, 4)
+    }
+
+    private func formatResetTime(_ ms: Int) -> String {
+        let hours = ms / (1000 * 60 * 60)
+        let minutes = (ms % (1000 * 60 * 60)) / (1000 * 60)
+        if hours == 0 && minutes == 0 {
+            return I18nService.shared.translate("daily.reset.soon")
+        } else if hours > 0 {
+            return String(format: I18nService.shared.translate("daily.reset.remaining"), hours, minutes)
+        } else {
+            return String(format: I18nService.shared.translate("daily.reset.minutesonly"), minutes)
+        }
     }
 }
