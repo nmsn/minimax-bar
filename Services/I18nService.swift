@@ -4,10 +4,10 @@ final class I18nService {
     static let shared = I18nService()
 
     private let userDefaultsLocaleKey = "app.locale"
-    private let defaultLocale = "zh-Hans"
+    private let defaultLocale = "en"
 
     private(set) var translations: [String: [String: String]] = [:]
-    private(set) var currentLocale: String = "zh-Hans"
+    private(set) var currentLocale: String = "en"
 
     private init() {}
 
