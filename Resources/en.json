@@ -29,5 +29,10 @@
     "weekly.reset.hours": "Resets in %dh",
     "status.critical": "Running Low",
     "status.warning": "Attention",
-    "status.healthy": "Normal"
+    "status.healthy": "Normal",
+    "error.notConfigured": "Token not configured. Please configure first.",
+    "error.invalidResponse": "Invalid response data.",
+    "error.networkError": "Network error: %@",
+    "error.unauthorized": "Authentication failed. Please check your Token.",
+    "error.tokenRequired": "Token not configured."
 }

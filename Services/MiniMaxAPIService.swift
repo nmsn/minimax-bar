@@ -9,13 +9,13 @@ enum APIError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case .notConfigured:
-            return "未配置 Token，请先配置"
+            return I18nService.shared.translate("error.notConfigured")
         case .invalidResponse:
-            return "无效的响应数据"
+            return I18nService.shared.translate("error.invalidResponse")
         case .networkError(let msg):
-            return "网络错误: \(msg)"
+            return String(format: I18nService.shared.translate("error.networkError"), msg)
         case .unauthorized:
-            return "认证失败，请检查 Token"
+            return I18nService.shared.translate("error.unauthorized")
         }
     }
 }
