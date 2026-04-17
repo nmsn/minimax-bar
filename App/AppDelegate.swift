@@ -6,6 +6,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var viewModel: UsageViewModel?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        I18nService.shared.loadTranslations()
+
         viewModel = UsageViewModel()
         statusBarController = StatusBarController(viewModel: viewModel!)
 

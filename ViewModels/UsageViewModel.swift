@@ -45,7 +45,7 @@ final class UsageViewModel: ObservableObject {
     func fetchUsage() async {
         guard ConfigService.shared.isConfigured else {
             isConfigured = false
-            errorMessage = "未配置 Token"
+            errorMessage = I18nService.shared.translate("error.tokenRequired")
             return
         }
 

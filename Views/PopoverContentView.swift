@@ -34,7 +34,7 @@ struct PopoverContentView: View {
 
     private var headerSection: some View {
         HStack {
-            Text("MiniMax 使用状态")
+            Text(I18nService.shared.translate("app.name"))
                 .font(.headline)
             Spacer()
             if viewModel.isLoading {
@@ -60,10 +60,10 @@ struct PopoverContentView: View {
                 .buttonStyle(.bordered)
             }
 
-            Text("配置 MiniMax Token")
+            Text(I18nService.shared.translate("popover.configureToken"))
                 .font(.subheadline.bold())
 
-            PasteableTextField(text: $viewModel.tokenInput, placeholder: "输入你的 Token")
+            PasteableTextField(text: $viewModel.tokenInput, placeholder: I18nService.shared.translate("popover.inputPlaceholder"))
                 .frame(height: 60)
 
             HStack {
@@ -90,7 +90,7 @@ struct PopoverContentView: View {
 
     private var tokenResetSection: some View {
         VStack(spacing: 16) {
-            Label("Token 已配置", systemImage: "checkmark.circle.fill")
+            Label(I18nService.shared.translate("popover.tokenConfigured"), systemImage: "checkmark.circle.fill")
                 .font(.subheadline.bold())
                 .foregroundColor(.green)
 
@@ -109,7 +109,7 @@ struct PopoverContentView: View {
 
     private func errorSection(_ error: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Label("错误", systemImage: "exclamationmark.triangle.fill")
+            Label(I18nService.shared.translate("popover.error"), systemImage: "exclamationmark.triangle.fill")
                 .font(.subheadline.bold())
                 .foregroundColor(.red)
             Text(error)
@@ -137,16 +137,16 @@ struct PopoverContentView: View {
 
     private var dailySection: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Label("日 (5小时窗口)", systemImage: "sun.max")
+            Label(I18nService.shared.translate("popover.daily"), systemImage: "sun.max")
                 .font(.caption.bold())
 
             HStack {
-                Text("剩余: \(viewModel.usageData?.dailyRemaining ?? 0)/\(viewModel.usageData?.dailyTotal ?? 0) 次")
+                Text("\(I18nService.shared.translate("popover.remaining")): \(viewModel.usageData?.dailyRemaining ?? 0)/\(viewModel.usageData?.dailyTotal ?? 0) \(I18nService.shared.translate("popover.unit.times"))")
                     .font(.caption)
                 Spacer()
             }
 
-            Text("重置: \(viewModel.usageData?.dailyResetTime ?? "")")
+            Text(I18nService.shared.translate("popover.reset") + ": " + formatResetTime(viewModel.usageData?.dailyResetMs ?? 0))
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -157,16 +157,16 @@ struct PopoverContentView: View {
 
     private var weeklySection: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Label("周", systemImage: "calendar")
+            Label(I18nService.shared.translate("popover.weekly"), systemImage: "calendar")
                 .font(.caption.bold())
 
             HStack {
-                Text("剩余: \(viewModel.usageData?.weeklyRemaining ?? 0)/\(viewModel.usageData?.weeklyTotal ?? 0) 次")
+                Text("\(I18nService.shared.translate("popover.remaining")): \(viewModel.usageData?.weeklyRemaining ?? 0)/\(viewModel.usageData?.weeklyTotal ?? 0) \(I18nService.shared.translate("popover.unit.times"))")
                     .font(.caption)
                 Spacer()
             }
 
-            Text("重置: \(viewModel.usageData?.weeklyResetTime ?? "")")
+            Text("\(I18nService.shared.translate("popover.reset")): \(viewModel.usageData?.weeklyResetFormatted ?? "")")
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -180,7 +180,7 @@ struct PopoverContentView: View {
         formatter.dateFormat = "yyyy/MM/dd"
 
         return HStack {
-            Text("套餐到期: \(formatter.string(from: date))")
+            Text("\(I18nService.shared.translate("popover.expiry")): \(formatter.string(from: date))")
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -189,11 +189,11 @@ struct PopoverContentView: View {
     private var statusSection: some View {
         HStack {
             if viewModel.usageData?.isHealthy == true {
-                Label("正常使用", systemImage: "checkmark.circle.fill")
+                Label(I18nService.shared.translate("popover.normal"), systemImage: "checkmark.circle.fill")
                     .font(.caption.bold())
                     .foregroundColor(.green)
             } else {
-                Label("使用量紧张", systemImage: "exclamationmark.circle.fill")
+                Label(I18nService.shared.translate("popover.low"), systemImage: "exclamationmark.circle.fill")
                     .font(.caption.bold())
                     .foregroundColor(.red)
             }
@@ -212,9 +212,9 @@ struct PopoverContentView: View {
 
     private var emptySection: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Label("未配置", systemImage: "gear")
+            Label(I18nService.shared.translate("popover.notConfigured"), systemImage: "gear")
                 .font(.subheadline.bold())
-            Text("请先配置 MiniMax Token")
+            Text(I18nService.shared.translate("popover.configureFirst"))
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -250,5 +250,17 @@ struct PopoverContentView: View {
             Spacer()
         }
         .padding(.vertical, 4)
+    }
+
+    private func formatResetTime(_ ms: Int) -> String {
+        let hours = ms / (1000 * 60 * 60)
+        let minutes = (ms % (1000 * 60 * 60)) / (1000 * 60)
+        if hours == 0 && minutes == 0 {
+            return I18nService.shared.translate("daily.reset.soon")
+        } else if hours > 0 {
+            return String(format: I18nService.shared.translate("daily.reset.remaining"), hours, minutes)
+        } else {
+            return String(format: I18nService.shared.translate("daily.reset.minutesonly"), minutes)
+        }
     }
 }

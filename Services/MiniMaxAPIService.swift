@@ -9,13 +9,13 @@ enum APIError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case .notConfigured:
-            return "未配置 Token，请先配置"
+            return I18nService.shared.translate("error.notConfigured")
         case .invalidResponse:
-            return "无效的响应数据"
+            return I18nService.shared.translate("error.invalidResponse")
         case .networkError(let msg):
-            return "网络错误: \(msg)"
+            return String(format: I18nService.shared.translate("error.networkError"), msg)
         case .unauthorized:
-            return "认证失败，请检查 Token"
+            return I18nService.shared.translate("error.unauthorized")
         }
     }
 }
@@ -91,25 +91,20 @@ final class MiniMaxAPIService {
         let weeklyPercentage = weeklyTotal > 0 ? Double(weeklyTotal - weeklyRemaining) / Double(weeklyTotal) : 0
 
         let resetMs = model.remainsTime ?? 0
-        let hours = resetMs / (1000 * 60 * 60)
-        let minutes = (resetMs % (1000 * 60 * 60)) / (1000 * 60)
-
-        var resetTimeFormatted = "\(hours)小时\(minutes)分后重置"
-        if hours == 0 && minutes == 0 {
-            resetTimeFormatted = "即将重置"
-        }
+        let weeklyResetMsValue = model.weeklyRemainsTime ?? 0
 
         return UsageData(
             modelName: model.modelName ?? "MiniMax-M2",
             dailyRemaining: dailyRemaining,
             dailyTotal: dailyTotal,
             dailyPercentage: dailyPercentage,
-            dailyResetTime: resetTimeFormatted,
+            dailyResetTime: "",
             dailyResetMs: resetMs,
             weeklyRemaining: weeklyRemaining,
             weeklyTotal: weeklyTotal,
             weeklyPercentage: weeklyPercentage,
-            weeklyResetTime: "周日 00:00",
+            weeklyResetTime: "",
+            weeklyResetMs: weeklyResetMsValue,
             expiryDate: nil,
             isHealthy: dailyPercentage < 0.85
         )

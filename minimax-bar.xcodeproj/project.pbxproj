@@ -7,10 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		I18NENJSON001234567890ABCD /* en.json in Resources */ = {isa = PBXBuildFile; fileRef = I18NENJSONREF001234567890ABCD /* en.json */; };
+		I18NZHHANSJSON001234567890ABCD /* zh-Hans.json in Resources */ = {isa = PBXBuildFile; fileRef = I18NZHHANSREF001234567890ABCD /* zh-Hans.json */; };
 		286B650AF2B3E06BD1FE0564 /* StatusBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87040E0E77306174FBBAFAD7 /* StatusBarController.swift */; };
 		528533B2A9783AA2ABB08C70 /* PopoverContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E80DA8CFB7E9C241AD219562 /* PopoverContentView.swift */; };
 		54BFA213CB9610762A290F97 /* UsageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F707908F549D97E91C0D89 /* UsageViewModel.swift */; };
 		74D243841302B7F106BDF193 /* ConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDC2FFB66817AEC87DEBB728 /* ConfigService.swift */; };
+		I18NSERV001234567890ABCDBUILD /* I18nService.swift in Sources */ = {isa = PBXBuildFile; fileRef = I18NSERV001234567890ABCD /* I18nService.swift */; };
 		7CC26FD2DFF8F211D875ED10 /* StatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58F35EDD13891BABB0C0D4F /* StatusBarView.swift */; };
 		8E87FE4B069D5B15C2F120F4 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 3CEF705F0367CC841193A983 /* Sparkle */; };
 		9019EC379A8F43E20E746467 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D418F181637F4FFA5F61CED /* AppDelegate.swift */; };
@@ -39,6 +42,9 @@
 		D62F92C3418F4C7EB016A7BF /* RightClickStatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightClickStatusBarView.swift; sourceTree = "<group>"; };
 		E80DA8CFB7E9C241AD219562 /* PopoverContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverContentView.swift; sourceTree = "<group>"; };
 		FDC2FFB66817AEC87DEBB728 /* ConfigService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigService.swift; sourceTree = "<group>"; };
+		I18NSERV001234567890ABCD /* I18nService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = I18nService.swift; sourceTree = "<group>"; };
+		I18NENJSONREF001234567890ABCD /* en.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = en.json; sourceTree = "<group>"; };
+		I18NZHHANSREF001234567890ABCD /* zh-Hans.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = zh-Hans.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +63,8 @@
 			isa = PBXGroup;
 			children = (
 				5E2D62580F10C749661E6DF2 /* Assets.xcassets */,
+				I18NENJSONREF001234567890ABCD /* en.json */,
+				I18NZHHANSREF001234567890ABCD /* zh-Hans.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -132,6 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				FDC2FFB66817AEC87DEBB728 /* ConfigService.swift */,
+				I18NSERV001234567890ABCD /* I18nService.swift */,
 				520CADEAEBA259864BFD13DC /* MiniMaxAPIService.swift */,
 				1726E030B39526410E23DA72 /* UpdateService.swift */,
 			);
@@ -200,6 +209,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB80559A03C3CF8288FB1658 /* Assets.xcassets in Resources */,
+				I18NENJSON001234567890ABCD /* en.json in Resources */,
+				I18NZHHANSJSON001234567890ABCD /* zh-Hans.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -212,6 +223,7 @@
 			files = (
 				9019EC379A8F43E20E746467 /* AppDelegate.swift in Sources */,
 				74D243841302B7F106BDF193 /* ConfigService.swift in Sources */,
+				I18NSERV001234567890ABCDBUILD /* I18nService.swift in Sources */,
 				DF86768F82AEDF951663F51B /* MiniMaxAPIService.swift in Sources */,
 				A53715929B172C96638F5B33 /* PasteableTextField.swift in Sources */,
 				528533B2A9783AA2ABB08C70 /* PopoverContentView.swift in Sources */,
