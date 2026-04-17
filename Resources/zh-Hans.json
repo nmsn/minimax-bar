@@ -17,8 +17,16 @@
     "popover.daily": "每日",
     "popover.remaining": "剩余",
     "popover.reset": "重置",
+    "popover.unit.times": "次",
     "popover.weekly": "每周",
     "popover.expiry": "到期时间",
     "popover.normal": "正常",
-    "popover.low": "偏低"
+    "popover.low": "偏低",
+    "daily.reset.remaining": "还剩%dh%d分",
+    "daily.reset.minutesonly": "还剩%d分",
+    "weekly.reset.remaining": "%d天%d小时后重置",
+    "weekly.reset.hours": "%d小时后重置",
+    "status.critical": "使用量紧张",
+    "status.warning": "注意使用",
+    "status.healthy": "正常使用"
 }

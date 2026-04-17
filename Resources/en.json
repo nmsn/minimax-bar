@@ -17,8 +17,16 @@
     "popover.daily": "Daily",
     "popover.remaining": "Remaining",
     "popover.reset": "Reset",
+    "popover.unit.times": "times",
     "popover.weekly": "Weekly",
     "popover.expiry": "Expiry",
     "popover.normal": "Normal",
-    "popover.low": "Low"
+    "popover.low": "Low",
+    "daily.reset.remaining": "%dh %dm remaining",
+    "daily.reset.minutesonly": "%dm remaining",
+    "weekly.reset.remaining": "Resets in %dd %dh",
+    "weekly.reset.hours": "Resets in %dh",
+    "status.critical": "Running Low",
+    "status.warning": "Attention",
+    "status.healthy": "Normal"
 }

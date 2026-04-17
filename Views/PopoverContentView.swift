@@ -141,7 +141,7 @@ struct PopoverContentView: View {
                 .font(.caption.bold())
 
             HStack {
-                Text("\(I18nService.shared.translate("popover.remaining")): \(viewModel.usageData?.dailyRemaining ?? 0)/\(viewModel.usageData?.dailyTotal ?? 0) 次")
+                Text("\(I18nService.shared.translate("popover.remaining")): \(viewModel.usageData?.dailyRemaining ?? 0)/\(viewModel.usageData?.dailyTotal ?? 0) \(I18nService.shared.translate("popover.unit.times"))")
                     .font(.caption)
                 Spacer()
             }
@@ -161,7 +161,7 @@ struct PopoverContentView: View {
                 .font(.caption.bold())
 
             HStack {
-                Text("\(I18nService.shared.translate("popover.remaining")): \(viewModel.usageData?.weeklyRemaining ?? 0)/\(viewModel.usageData?.weeklyTotal ?? 0) 次")
+                Text("\(I18nService.shared.translate("popover.remaining")): \(viewModel.usageData?.weeklyRemaining ?? 0)/\(viewModel.usageData?.weeklyTotal ?? 0) \(I18nService.shared.translate("popover.unit.times"))")
                     .font(.caption)
                 Spacer()
             }
