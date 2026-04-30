@@ -1,27 +1,27 @@
-# Multi-Platform Support Design
+# 多平台支持设计方案
 
-**Date:** 2026-04-30
-**Status:** Draft
-**App Rename:** MiniMaxBar → QuotaBar
+**日期:** 2026-04-30
+**状态:** 草稿
+**应用重命名:** MiniMaxBar → QuotaBar
 
-## Overview
+## 概述
 
-Expand the existing MiniMax-only menu bar app into a multi-platform quota/usage tracker called **QuotaBar**. The app will support multiple AI platforms (MiniMax, DeepSeek, and future platforms) with a unified protocol-based architecture. Users configure each platform independently, the status bar shows one platform at a time (switchable), and the popover displays all configured platforms.
+将现有的 MiniMax 专用菜单栏应用扩展为多平台配额/用量跟踪工具 **QuotaBar**。支持多个 AI 平台（MiniMax、DeepSeek 及未来平台），采用统一的协议化架构。用户独立配置每个平台，状态栏一次显示一个平台（可切换），浮窗显示所有已配置平台的详细信息。
 
-## Goals
+## 目标
 
-1. Support multiple AI platforms with different data models (MiniMax: daily/weekly quotas, DeepSeek: monetary balance)
-2. Status bar shows a single platform, switchable via right-click menu or popover click
-3. Popover displays all configured platforms' detailed usage
-4. Per-platform config files with simple API key configuration (no auto-scanning)
-5. Ship config templates so users only need to fill in their API key
-6. Protocol-based architecture for easy platform addition
-7. TDD-driven development with comprehensive test coverage
-8. Rename app from MiniMaxBar to QuotaBar
+1. 支持多个 AI 平台，适配不同数据模型（MiniMax：日/周配额，DeepSeek：余额）
+2. 状态栏显示单个平台，支持右键菜单或浮窗点击切换
+3. 浮窗显示所有已配置平台的详细用量
+4. 每个平台独立配置文件，仅需填写 API Key（不扫描本地文件）
+5. 内置配置模板，用户只需填写 Key 即可使用
+6. 协议化架构，方便新增平台
+7. TDD 驱动开发，全面测试覆盖
+8. 应用从 MiniMaxBar 重命名为 QuotaBar
 
-## Architecture
+## 架构
 
-### Directory Structure
+### 目录结构
 
 ```
 App/
@@ -29,18 +29,18 @@ App/
   AppDelegate.swift
   Info.plist
 Models/
-  PlatformProtocol.swift        -- PlatformType enum, PlatformUsageData, UsageMetric, PlatformConfigData
-  UsageData.swift               -- (kept for backward compatibility, used by MiniMax internally)
+  PlatformProtocol.swift        -- PlatformType 枚举、PlatformUsageData、UsageMetric、PlatformConfigData
+  UsageData.swift               -- （保留，MiniMax 内部使用）
 Services/
-  ConfigService.swift           -- global config (display mode, active platform, locale)
-  NetworkService.swift          -- protocol + URLSession implementation (for testability)
+  ConfigService.swift           -- 全局配置（显示模式、当前平台、语言）
+  NetworkService.swift          -- 网络协议 + URLSession 实现（可测试性）
   Platforms/
-    PlatformConfigStore.swift   -- per-platform config file management
-    PlatformManager.swift       -- orchestrates all platform services
+    PlatformConfigStore.swift   -- 单平台配置文件管理
+    PlatformManager.swift       -- 平台服务编排
     MiniMaxPlatform/
-      MiniMaxAPIService.swift   -- refactored from existing
+      MiniMaxAPIService.swift   -- 从现有代码重构
     DeepSeekPlatform/
-      DeepSeekAPIService.swift  -- new
+      DeepSeekAPIService.swift  -- 新增
   I18nService.swift
   UpdateService.swift
 Resources/
@@ -51,13 +51,13 @@ Resources/
   zh-Hans.json
   Assets.xcassets/
 StatusBar/
-  StatusBarController.swift     -- updated for multi-platform
+  StatusBarController.swift     -- 适配多平台
   RightClickStatusBarView.swift
 ViewModels/
-  PlatformViewModel.swift       -- replaces UsageViewModel
+  PlatformViewModel.swift       -- 替换 UsageViewModel
 Views/
-  PopoverContentView.swift      -- redesigned for multi-platform
-  StatusBarView.swift           -- updated for PlatformUsageData
+  PopoverContentView.swift      -- 重新设计，支持多平台
+  StatusBarView.swift           -- 适配 PlatformUsageData
   PasteableTextField.swift
 Tests/
   Platforms/
@@ -76,10 +76,10 @@ Tests/
     MockNetworkService.swift
 ```
 
-### Core Protocols and Data Models
+### 核心协议与数据模型
 
 ```swift
-// Platform identifier
+// 平台标识
 enum PlatformType: String, Codable, CaseIterable {
     case minimax
     case deepseek
@@ -92,7 +92,7 @@ enum PlatformType: String, Codable, CaseIterable {
     }
 }
 
-// Typed errors for TDD assertions
+// 类型化错误，便于 TDD 断言
 enum PlatformError: Error, Equatable {
     case notConfigured(PlatformType)
     case invalidResponse(PlatformType)
@@ -101,7 +101,7 @@ enum PlatformError: Error, Equatable {
     case decodingError(PlatformType, String)
 }
 
-// Unified usage data — every platform produces this
+// 统一用量数据 — 每个平台都产出此结构
 struct PlatformUsageData: Equatable {
     let platform: PlatformType
     let displayName: String
@@ -110,16 +110,16 @@ struct PlatformUsageData: Equatable {
     let isHealthy: Bool
 }
 
-// A single metric row
+// 单条指标
 struct UsageMetric: Equatable {
     let label: String           // "Daily Quota", "Balance"
     let currentValue: Double    // 45, 4.50
-    let totalValue: Double?     // 100, nil for balance-only
+    let totalValue: Double?     // 100, 余额类为 nil
     let unit: String            // "requests", "USD"
-    let resetTime: Date?        // nil for balance
+    let resetTime: Date?        // 余额类为 nil
 }
 
-// Lightweight config snapshot passed to API services (decoupled from PlatformConfigStore)
+// 轻量配置快照，传递给 API 服务（与 PlatformConfigStore 解耦）
 struct PlatformConfigData {
     let platformType: PlatformType
     let apiBaseURL: String
@@ -128,19 +128,19 @@ struct PlatformConfigData {
     let apiKey: String
 }
 
-// Network abstraction for testability
+// 网络抽象层，便于测试
 protocol NetworkService {
     func data(from request: URLRequest) async throws -> (Data, URLResponse)
 }
 
-// Default implementation wraps URLSession
+// 默认实现，封装 URLSession
 class URLSessionNetworkService: NetworkService {
     func data(from request: URLRequest) async throws -> (Data, URLResponse) {
         try await URLSession.shared.data(for: request)
     }
 }
 
-// Per-platform API service protocol
+// 平台 API 服务协议
 protocol PlatformAPIService {
     var platformType: PlatformType { get }
     func fetchUsage(config: PlatformConfigData, network: NetworkService) async throws -> PlatformUsageData
@@ -148,11 +148,11 @@ protocol PlatformAPIService {
 }
 ```
 
-### Config Templates
+### 配置模板
 
-Ship default templates in `Resources/ConfigTemplates/`:
+应用内置默认模板，位于 `Resources/ConfigTemplates/`：
 
-**minimax.template.json:**
+**minimax.template.json：**
 ```json
 {
   "api_base_url": "https://www.minimaxi.com/v1/api/openplatform/coding_plan/remains",
@@ -162,7 +162,7 @@ Ship default templates in `Resources/ConfigTemplates/`:
 }
 ```
 
-**deepseek.template.json:**
+**deepseek.template.json：**
 ```json
 {
   "api_base_url": "https://api.deepseek.com",
@@ -172,37 +172,37 @@ Ship default templates in `Resources/ConfigTemplates/`:
 }
 ```
 
-### Config Service
+### 配置服务
 
-**Global config** (`ConfigService`):
-- `displayMode: DisplayMode` (.used / .remaining)
-- `activePlatform: PlatformType` (currently shown in status bar)
-- `locale: String` ("en" / "zh-Hans")
-- Persists to `UserDefaults`
+**全局配置**（`ConfigService`）：
+- `displayMode: DisplayMode`（.used / .remaining）
+- `activePlatform: PlatformType`（状态栏当前显示的平台）
+- `locale: String`（"en" / "zh-Hans"）
+- 持久化到 `UserDefaults`
 
-**Per-platform config** (`PlatformConfigStore`):
-- Config file: `~/.quotabar-{platform}.json`
-- Fields: `apiBaseURL`, `authHeader`, `authPrefix`, `apiKey`
-- On first access: copies template from bundle to config path
-- `isConfigured`: true when `apiKey` is non-empty
-- `toConfigData() -> PlatformConfigData` — creates lightweight snapshot for API services
-- Migration: `~/.minimax-config.json` → `~/.quotabar-minimax.json` (reads `"token"` field from old JSON, maps to `api_key`)
+**单平台配置**（`PlatformConfigStore`）：
+- 配置文件路径：`~/.quotabar-{platform}.json`
+- 字段：`apiBaseURL`、`authHeader`、`authPrefix`、`apiKey`
+- 首次访问时从 bundle 复制模板到配置路径
+- `isConfigured`：`apiKey` 非空时为 true
+- `toConfigData() -> PlatformConfigData`：创建轻量快照供 API 服务使用
+- 迁移：`~/.minimax-config.json` → `~/.quotabar-minimax.json`（读取旧 JSON 中的 `"token"` 字段，映射为 `api_key`）
 
-### Platform Services
+### 平台服务
 
-**MiniMaxAPIService** (refactored from existing):
-- Receives `PlatformConfigData` and `NetworkService` via `fetchUsage()`
-- Existing API call logic preserved
-- Maps `APIResponse` → `PlatformUsageData` with metrics:
+**MiniMaxAPIService**（从现有代码重构）：
+- 通过 `fetchUsage()` 接收 `PlatformConfigData` 和 `NetworkService`
+- 保留现有 API 调用逻辑
+- 将 `APIResponse` 映射为 `PlatformUsageData`，包含指标：
   - `UsageMetric("Daily", usedCount, totalCount, "requests", resetTime)`
   - `UsageMetric("Weekly", usedCount, totalCount, "requests", resetTime)`
 
-**DeepSeekAPIService** (new):
+**DeepSeekAPIService**（新增）：
 
-The DeepSeek balance API:
-- **Endpoint:** `GET https://api.deepseek.com/user/balance`
-- **Auth:** `Authorization: Bearer <api_key>`
-- **Response schema:**
+DeepSeek 余额 API：
+- **接口：** `GET https://api.deepseek.com/user/balance`
+- **认证：** `Authorization: Bearer <api_key>`
+- **响应结构：**
   ```json
   {
     "is_available": true,
@@ -210,27 +210,27 @@ The DeepSeek balance API:
     "currency": "USD"
   }
   ```
-- **Field details:**
-  - `is_available` (bool): whether the account can still make API calls
-  - `balance` (string): remaining balance as a decimal string
-  - `currency` (string): currency code, e.g. "USD" or "CNY"
-- Maps to `PlatformUsageData` with metrics:
+- **字段说明：**
+  - `is_available`（布尔）：账户是否仍可调用 API
+  - `balance`（字符串）：剩余余额，十进制字符串
+  - `currency`（字符串）：货币代码，如 "USD" 或 "CNY"
+- 映射为 `PlatformUsageData`，包含指标：
   - `UsageMetric("Balance", balance, nil, currency, nil)`
 - `isHealthy` = `is_available && balance > 0`
 
-**PlatformManager**:
-- `static let shared` singleton
-- Holds all `PlatformAPIService` instances keyed by `PlatformType`
-- Holds a `NetworkService` instance (defaults to `URLSessionNetworkService`)
-- Dependency injection: `init(networkService: NetworkService)` for testing
-- `fetchUsage(for:)` — single platform, reads config from `PlatformConfigStore`
-- `fetchAllUsage()` — parallel fetch using `async let` for all configured platforms; results collected via `TaskGroup`
-- `configuredPlatforms()` — list of platforms with non-empty API keys
-- Cancellation: on `fetchAllUsage()`, a `Task` is used; callers can cancel via `task.cancel()` when switching platforms
+**PlatformManager**：
+- `static let shared` 单例
+- 持有所有 `PlatformAPIService` 实例，按 `PlatformType` 索引
+- 持有 `NetworkService` 实例（默认 `URLSessionNetworkService`）
+- 依赖注入：`init(networkService: NetworkService)` 用于测试
+- `fetchUsage(for:)` — 单平台，从 `PlatformConfigStore` 读取配置
+- `fetchAllUsage()` — 使用 `async let` 并行获取所有已配置平台；通过 `TaskGroup` 收集结果
+- `configuredPlatforms()` — 返回已配置 API Key 的平台列表
+- 取消机制：`fetchAllUsage()` 使用 `Task`，调用方可在切换平台时通过 `task.cancel()` 取消
 
 ### ViewModel
 
-`PlatformViewModel` replaces `UsageViewModel`:
+`PlatformViewModel` 替换 `UsageViewModel`：
 
 ```swift
 @MainActor class PlatformViewModel: ObservableObject {
@@ -242,102 +242,102 @@ The DeepSeek balance API:
     @Published var configPlatform: PlatformType?
     @Published var apiKeyInput: String = ""
 
-    // Injected dependencies for testability
+    // 依赖注入，便于测试
     private let platformManager: PlatformManager
     private let configService: ConfigService
 
     init(platformManager: PlatformManager = .shared, configService: ConfigService = .shared)
 
-    func startAutoRefresh()     // 30s timer, fetches all configured platforms
+    func startAutoRefresh()     // 30 秒定时器，获取所有已配置平台
     func stopAutoRefresh()
-    func fetchAllUsage()        // uses TaskGroup internally
+    func fetchAllUsage()        // 内部使用 TaskGroup
     func fetchUsage(for: PlatformType)
     func switchActivePlatform(_ platform: PlatformType)
     func configureAPIKey(for platform: PlatformType)
     func saveAPIKey(for platform: PlatformType)
     func cancelConfig()
-    func cleanup()              // cancels in-flight tasks + stops timer
+    func cleanup()              // 取消进行中的任务 + 停止定时器
 }
 ```
 
-### UI
+### UI 设计
 
-**StatusBarView**:
-- Takes `PlatformUsageData?` instead of `UsageData?`
-- Shows first metric's percentage/balance based on platform type
-- Adapts display format: percentage for quota-based, dollar amount for balance-based
+**StatusBarView**：
+- 接收 `PlatformUsageData?` 替代 `UsageData?`
+- 根据平台类型显示首个指标的百分比或余额
+- 自适应显示格式：配额类显示百分比，余额类显示金额
 
-**PopoverContentView** (280 x dynamic height):
-- Header: "QuotaBar" + refresh spinner
-- Platform navigator: tabs showing all configured platforms, active platform highlighted
-- Each platform section: metric cards (same style as current MiniMax)
-- Unconfigured platforms: "Configure API Key" button
-- Footer: refresh + settings gear
+**PopoverContentView**（280 x 动态高度）：
+- 头部："QuotaBar" + 刷新旋转图标
+- 平台导航：标签页显示所有已配置平台，当前平台高亮
+- 每个平台区域：指标卡片（与现有 MiniMax 风格一致）
+- 未配置平台：显示"配置 API Key"按钮
+- 底部：刷新 + 设置齿轮
 
-**Right-click menu**:
-- Display Settings submenu (Show Used / Show Remaining)
-- Platform submenu:
-  - Checkmark on active platform
-  - List of configured platforms
-  - "Configure..." option
-- Language submenu (English / 简体中文)
-- Check for Updates
-- Quit
+**右键菜单**：
+- 显示设置子菜单（显示已使用 / 显示剩余）
+- 平台子菜单：
+  - 当前平台打勾
+  - 列出已配置平台
+  - "配置..."选项
+- 语言子菜单（English / 简体中文）
+- 检查更新
+- 退出
 
-### Platform Switching
+### 平台切换
 
-- **Right-click menu**: Select platform → updates `ConfigService.activePlatform` → status bar refreshes
-- **Popover click**: Click platform tab → same as right-click menu selection
-- Both paths go through `PlatformViewModel.switchActivePlatform()`
-- On switch: cancel any in-flight fetch for the previous active platform
+- **右键菜单**：选择平台 → 更新 `ConfigService.activePlatform` → 状态栏刷新
+- **浮窗点击**：点击平台标签 → 同右键菜单效果
+- 两个路径都经过 `PlatformViewModel.switchActivePlatform()`
+- 切换时取消前一个平台的进行中请求
 
-### App Rename
+### 应用重命名
 
-- `project.yml`: target `quota-bar`, product `QuotaBar`, bundle ID `com.quota.statusbar`
-- All I18n strings: "MiniMax Usage" → "QuotaBar"
-- Config path: `~/.quotabar-*.json`
-- README updates
-- Git repo rename (optional, user's choice)
+- `project.yml`：target `quota-bar`，product `QuotaBar`，bundle ID `com.quota.statusbar`
+- 所有 I18n 字符串："MiniMax Usage" → "QuotaBar"
+- 配置路径：`~/.quotabar-*.json`
+- README 更新
+- Git 仓库重命名（可选，用户决定）
 
-## Data Flow
+## 数据流
 
-1. **App Launch**: AppDelegate creates `PlatformViewModel`, loads all platform configs, starts auto-refresh
-2. **Auto-refresh (30s)**: `PlatformViewModel.fetchAllUsage()` → `PlatformManager.fetchAllUsage()` → parallel `fetchUsage()` per configured platform via `TaskGroup`
-3. **Status bar update**: Delegate callback → `StatusBarController.update()` with active platform's data
-4. **Platform switch**: User action → `switchActivePlatform()` → cancel in-flight tasks → update `ConfigService.activePlatform` → immediate status bar refresh
-5. **Config flow**: User clicks configure → shows API key input → saves to `PlatformConfigStore` → triggers fetch
+1. **应用启动**：AppDelegate 创建 `PlatformViewModel`，加载所有平台配置，启动自动刷新
+2. **自动刷新（30 秒）**：`PlatformViewModel.fetchAllUsage()` → `PlatformManager.fetchAllUsage()` → 通过 `TaskGroup` 并行获取每个已配置平台
+3. **状态栏更新**：委托回调 → `StatusBarController.update()` 传入当前平台数据
+4. **平台切换**：用户操作 → `switchActivePlatform()` → 取消进行中的任务 → 更新 `ConfigService.activePlatform` → 立即刷新状态栏
+5. **配置流程**：用户点击配置 → 显示 API Key 输入框 → 保存到 `PlatformConfigStore` → 触发获取
 
-## Migration
+## 迁移方案
 
-1. Detect `~/.minimax-config.json` on first launch
-2. Read existing `"token"` field (JSON key is `"token"`, confirmed from current `ConfigService.loadConfig()`)
-3. Create `~/.quotabar-minimax.json` with token as `api_key` and template defaults for `api_base_url`, `auth_header`, `auth_prefix`
-4. Delete old config file (or rename to `.bak`)
+1. 首次启动时检测 `~/.minimax-config.json`
+2. 读取现有 `"token"` 字段（JSON key 为 `"token"`，已从当前 `ConfigService.loadConfig()` 确认）
+3. 创建 `~/.quotabar-minimax.json`，将 token 映射为 `api_key`，并填入模板默认的 `api_base_url`、`auth_header`、`auth_prefix`
+4. 删除旧配置文件（或重命名为 `.bak`）
 
-## Testing Strategy
+## 测试策略
 
-TDD approach — write tests before implementation:
+TDD 方式 — 先写测试再实现：
 
-1. **PlatformConfigStore tests**: load/save API key, template copying, migration from old format
-2. **MiniMaxAPIService tests**: response parsing, cache, error handling (using `MockNetworkService`)
-3. **DeepSeekAPIService tests**: balance parsing, error handling (using `MockNetworkService`)
-4. **PlatformManager tests**: single/all fetch, partial failures, platform registration (inject `MockNetworkService`)
-5. **PlatformViewModel tests**: platform switching, config UI state, auto-refresh (inject `MockPlatformManager`)
-6. **ConfigService tests**: global settings persistence
-7. **NetworkService tests**: verify `URLSessionNetworkService` wraps URLSession correctly
+1. **PlatformConfigStore 测试**：加载/保存 API Key、模板复制、旧格式迁移
+2. **MiniMaxAPIService 测试**：响应解析、缓存、错误处理（使用 `MockNetworkService`）
+3. **DeepSeekAPIService 测试**：余额解析、错误处理（使用 `MockNetworkService`）
+4. **PlatformManager 测试**：单平台/全部获取、部分失败、平台注册（注入 `MockNetworkService`）
+5. **PlatformViewModel 测试**：平台切换、配置 UI 状态、自动刷新（注入 `MockPlatformManager`）
+6. **ConfigService 测试**：全局设置持久化
+7. **NetworkService 测试**：验证 `URLSessionNetworkService` 正确封装 URLSession
 
-**Mocking approach:**
-- `MockNetworkService` implements `NetworkService`, returns pre-configured `Data`/`URLResponse` pairs
-- `MockPlatformAPIService` implements `PlatformAPIService`, returns pre-built `PlatformUsageData`
-- `MockPlatformConfigStore` implements a lightweight config for testing without filesystem
-- All mocks injected via initializer parameters (no global state in tests)
+**Mock 方案：**
+- `MockNetworkService` 实现 `NetworkService`，返回预配置的 `Data`/`URLResponse`
+- `MockPlatformAPIService` 实现 `PlatformAPIService`，返回预构建的 `PlatformUsageData`
+- `MockPlatformConfigStore` 提供轻量配置，不依赖文件系统
+- 所有 mock 通过初始化器注入（测试中无全局状态）
 
-## Platform Addition Guide
+## 新增平台指南
 
-To add a new platform:
-1. Add case to `PlatformType` enum
-2. Create `Resources/ConfigTemplates/{platform}.template.json`
-3. Create `Services/Platforms/{Platform}Platform/{Platform}APIService.swift` implementing `PlatformAPIService`
-4. Register in `PlatformManager`
-5. Add I18n strings
-6. Write tests first (TDD)
+添加新平台的步骤：
+1. 在 `PlatformType` 枚举中添加新 case
+2. 创建 `Resources/ConfigTemplates/{platform}.template.json`
+3. 创建 `Services/Platforms/{Platform}Platform/{Platform}APIService.swift` 实现 `PlatformAPIService`
+4. 在 `PlatformManager` 中注册
+5. 添加 I18n 字符串
+6. 先写测试（TDD）
