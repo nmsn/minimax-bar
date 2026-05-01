@@ -1,5 +1,5 @@
 import XCTest
-@testable import MiniMaxBar
+@testable import QuotaBar
 
 @MainActor
 final class PlatformViewModelTests: XCTestCase {

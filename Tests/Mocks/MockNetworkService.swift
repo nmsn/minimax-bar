@@ -1,5 +1,5 @@
 import Foundation
-@testable import MiniMaxBar
+@testable import QuotaBar
 
 class MockNetworkService: NetworkService {
     var mockData: Data?

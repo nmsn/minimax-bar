@@ -1,6 +1,6 @@
-name: minimax-bar
+name: quota-bar
 options:
-  bundleIdPrefix: com.minimax
+  bundleIdPrefix: com.quota
   deploymentTarget:
     macOS: "14.0"
 settings:
@@ -17,7 +17,7 @@ packages:
     from: "2.6.0"
 
 targets:
-  minimax-bar:
+  quota-bar:
     type: application
     platform: macOS
     sources:
@@ -32,27 +32,27 @@ targets:
       - package: Sparkle
     settings:
       base:
-        PRODUCT_NAME: MiniMaxBar
-        PRODUCT_BUNDLE_IDENTIFIER: com.minimax.statusbar
-        MARKETING_VERSION: "1.0.2"
-        CURRENT_PROJECT_VERSION: "3"
+        PRODUCT_NAME: QuotaBar
+        PRODUCT_BUNDLE_IDENTIFIER: com.quota.statusbar
+        MARKETING_VERSION: "2.0.0"
+        CURRENT_PROJECT_VERSION: "1"
         INFOPLIST_FILE: App/Info.plist
         GENERATE_INFOPLIST_FILE: NO
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         SUPublicEDKey: "8n6qpNCw5nnChaXomz88SKWPaYUXfvSo8P9fMpq/6hs="
 
-  minimax-bar-tests:
+  quota-bar-tests:
     type: bundle.unit-test
     platform: macOS
     sources:
       - path: Tests
     dependencies:
-      - target: minimax-bar
+      - target: quota-bar
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.minimax.statusbar.tests
+        PRODUCT_BUNDLE_IDENTIFIER: com.quota.statusbar.tests
         CODE_SIGN_IDENTITY: "-"
         CODE_SIGNING_REQUIRED: NO
         GENERATE_INFOPLIST_FILE: YES
-        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/MiniMaxBar.app/Contents/MacOS/MiniMaxBar"
-        MODULE_NAME: minimax_bar_tests
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/QuotaBar.app/Contents/MacOS/QuotaBar"
+        MODULE_NAME: quota_bar_tests

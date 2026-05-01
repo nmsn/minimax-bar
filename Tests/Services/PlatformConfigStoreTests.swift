@@ -1,5 +1,5 @@
 import XCTest
-@testable import MiniMaxBar
+@testable import QuotaBar
 
 final class PlatformConfigStoreTests: XCTestCase {
     var tempDir: URL!
