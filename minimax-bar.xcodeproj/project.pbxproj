@@ -7,29 +7,45 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		I18NENJSON001234567890ABCD /* en.json in Resources */ = {isa = PBXBuildFile; fileRef = I18NENJSONREF001234567890ABCD /* en.json */; };
-		I18NZHHANSJSON001234567890ABCD /* zh-Hans.json in Resources */ = {isa = PBXBuildFile; fileRef = I18NZHHANSREF001234567890ABCD /* zh-Hans.json */; };
+		0830738F155D64BF79644BF6 /* PlatformProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCB26616C0F1BADA2D87E7DF /* PlatformProtocol.swift */; };
+		09DE0A4E83EE55A3973A2EEE /* zh-Hans.json in Resources */ = {isa = PBXBuildFile; fileRef = C3D6110CE61D40E23750506A /* zh-Hans.json */; };
 		286B650AF2B3E06BD1FE0564 /* StatusBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87040E0E77306174FBBAFAD7 /* StatusBarController.swift */; };
+		4829777107612D95B4C5D1AB /* minimax.template.json in Resources */ = {isa = PBXBuildFile; fileRef = D1523BB7CFFA93A23C2E5255 /* minimax.template.json */; };
 		528533B2A9783AA2ABB08C70 /* PopoverContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E80DA8CFB7E9C241AD219562 /* PopoverContentView.swift */; };
 		54BFA213CB9610762A290F97 /* UsageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F707908F549D97E91C0D89 /* UsageViewModel.swift */; };
+		6E82944C17CFD42735A25695 /* en.json in Resources */ = {isa = PBXBuildFile; fileRef = 500D72728EF127CFEDC9A0E3 /* en.json */; };
 		74D243841302B7F106BDF193 /* ConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDC2FFB66817AEC87DEBB728 /* ConfigService.swift */; };
-		I18NSERV001234567890ABCDBUILD /* I18nService.swift in Sources */ = {isa = PBXBuildFile; fileRef = I18NSERV001234567890ABCD /* I18nService.swift */; };
 		7CC26FD2DFF8F211D875ED10 /* StatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58F35EDD13891BABB0C0D4F /* StatusBarView.swift */; };
 		8E87FE4B069D5B15C2F120F4 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 3CEF705F0367CC841193A983 /* Sparkle */; };
 		9019EC379A8F43E20E746467 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D418F181637F4FFA5F61CED /* AppDelegate.swift */; };
+		9D9E3BDD97F01C89DBBE262B /* PlatformProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484CCC1601B73459C494F714 /* PlatformProtocolTests.swift */; };
 		A53715929B172C96638F5B33 /* PasteableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DDAC5967C3A1DC80CCCDFBF /* PasteableTextField.swift */; };
 		BA86B7C4A3722052BBA3E558 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 150DEDC5101B205458CA1070 /* main.swift */; };
 		BB80559A03C3CF8288FB1658 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5E2D62580F10C749661E6DF2 /* Assets.xcassets */; };
 		CFB0B5E91AF4A7A8EE66048C /* UpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1726E030B39526410E23DA72 /* UpdateService.swift */; };
+		DA3A510398D5A2CB9E26D7CD /* I18nService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F079A055DFB0B0E297556514 /* I18nService.swift */; };
 		DF86768F82AEDF951663F51B /* MiniMaxAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520CADEAEBA259864BFD13DC /* MiniMaxAPIService.swift */; };
 		E5050BAEDEF2C9B56C26D28E /* RightClickStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62F92C3418F4C7EB016A7BF /* RightClickStatusBarView.swift */; };
+		E754BF578AB40ACFF9A0DF89 /* deepseek.template.json in Resources */ = {isa = PBXBuildFile; fileRef = D1DC839408233A8D40A6E3D4 /* deepseek.template.json */; };
 		ED82774EB141967B065BC1EE /* UsageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CB46AC7AC6D27E4E57ACFB /* UsageData.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B7245F53221D1D1CC4DFF874 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F940659A562114A0051C638F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6B6343EC85B55B73E8280213;
+			remoteInfo = "minimax-bar";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		150DEDC5101B205458CA1070 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		1726E030B39526410E23DA72 /* UpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateService.swift; sourceTree = "<group>"; };
 		24CB46AC7AC6D27E4E57ACFB /* UsageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageData.swift; sourceTree = "<group>"; };
+		484CCC1601B73459C494F714 /* PlatformProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformProtocolTests.swift; sourceTree = "<group>"; };
+		500D72728EF127CFEDC9A0E3 /* en.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = en.json; sourceTree = "<group>"; };
 		520CADEAEBA259864BFD13DC /* MiniMaxAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniMaxAPIService.swift; sourceTree = "<group>"; };
 		54F707908F549D97E91C0D89 /* UsageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageViewModel.swift; sourceTree = "<group>"; };
 		57E52796AA0B488125646BA7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -38,13 +54,16 @@
 		87040E0E77306174FBBAFAD7 /* StatusBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarController.swift; sourceTree = "<group>"; };
 		8D418F181637F4FFA5F61CED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8DDAC5967C3A1DC80CCCDFBF /* PasteableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteableTextField.swift; sourceTree = "<group>"; };
+		C3D6110CE61D40E23750506A /* zh-Hans.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "zh-Hans.json"; sourceTree = "<group>"; };
+		D1523BB7CFFA93A23C2E5255 /* minimax.template.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = minimax.template.json; sourceTree = "<group>"; };
+		D1DC839408233A8D40A6E3D4 /* deepseek.template.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = deepseek.template.json; sourceTree = "<group>"; };
 		D58F35EDD13891BABB0C0D4F /* StatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarView.swift; sourceTree = "<group>"; };
 		D62F92C3418F4C7EB016A7BF /* RightClickStatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightClickStatusBarView.swift; sourceTree = "<group>"; };
+		DCB26616C0F1BADA2D87E7DF /* PlatformProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformProtocol.swift; sourceTree = "<group>"; };
 		E80DA8CFB7E9C241AD219562 /* PopoverContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverContentView.swift; sourceTree = "<group>"; };
+		F079A055DFB0B0E297556514 /* I18nService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = I18nService.swift; sourceTree = "<group>"; };
+		FB7DDB1EF4C02C777E1709A8 /* minimax-bar-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "minimax-bar-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FDC2FFB66817AEC87DEBB728 /* ConfigService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigService.swift; sourceTree = "<group>"; };
-		I18NSERV001234567890ABCD /* I18nService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = I18nService.swift; sourceTree = "<group>"; };
-		I18NENJSONREF001234567890ABCD /* en.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = en.json; sourceTree = "<group>"; };
-		I18NZHHANSREF001234567890ABCD /* zh-Hans.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = zh-Hans.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,18 +82,45 @@
 			isa = PBXGroup;
 			children = (
 				5E2D62580F10C749661E6DF2 /* Assets.xcassets */,
-				I18NENJSONREF001234567890ABCD /* en.json */,
-				I18NZHHANSREF001234567890ABCD /* zh-Hans.json */,
+				500D72728EF127CFEDC9A0E3 /* en.json */,
+				C3D6110CE61D40E23750506A /* zh-Hans.json */,
+				384AFFFAB67F5DF9B7DEEBC1 /* ConfigTemplates */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		1F0020C795F35B365DB49525 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				38BA26B0A94D40926CC08372 /* Models */,
+			);
+			path = Tests;
 			sourceTree = "<group>";
 		};
 		32A2440CB531A0C02174EF1E /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				FB7DDB1EF4C02C777E1709A8 /* minimax-bar-tests.xctest */,
 				62331448B3D71397B0C5AF5B /* minimax-bar.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		384AFFFAB67F5DF9B7DEEBC1 /* ConfigTemplates */ = {
+			isa = PBXGroup;
+			children = (
+				D1DC839408233A8D40A6E3D4 /* deepseek.template.json */,
+				D1523BB7CFFA93A23C2E5255 /* minimax.template.json */,
+			);
+			path = ConfigTemplates;
+			sourceTree = "<group>";
+		};
+		38BA26B0A94D40926CC08372 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				484CCC1601B73459C494F714 /* PlatformProtocolTests.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		53D284EC157A6AD1C50426CA /* StatusBar */ = {
@@ -117,6 +163,7 @@
 		B2F50AD92A09169DF627F857 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				DCB26616C0F1BADA2D87E7DF /* PlatformProtocol.swift */,
 				24CB46AC7AC6D27E4E57ACFB /* UsageData.swift */,
 			);
 			path = Models;
@@ -130,6 +177,7 @@
 				0263BE36BCF9241DDB49D4B7 /* Resources */,
 				D49FC450F02B5E4AC5941C33 /* Services */,
 				53D284EC157A6AD1C50426CA /* StatusBar */,
+				1F0020C795F35B365DB49525 /* Tests */,
 				92F4121597D1495A00BEDB9C /* ViewModels */,
 				9413705FA33160FCFAB9B278 /* Views */,
 				32A2440CB531A0C02174EF1E /* Products */,
@@ -140,11 +188,18 @@
 			isa = PBXGroup;
 			children = (
 				FDC2FFB66817AEC87DEBB728 /* ConfigService.swift */,
-				I18NSERV001234567890ABCD /* I18nService.swift */,
+				F079A055DFB0B0E297556514 /* I18nService.swift */,
 				520CADEAEBA259864BFD13DC /* MiniMaxAPIService.swift */,
 				1726E030B39526410E23DA72 /* UpdateService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		"TEMP_F7EDD34C-4AE8-49FD-8AEC-AD5A26A8EDF8" /* Platforms */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Platforms;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -169,6 +224,24 @@
 			productName = "minimax-bar";
 			productReference = 62331448B3D71397B0C5AF5B /* minimax-bar.app */;
 			productType = "com.apple.product-type.application";
+		};
+		79724BCFA1A70B2DDAAA60C0 /* minimax-bar-tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4873EAA054CA3ACE60FA7833 /* Build configuration list for PBXNativeTarget "minimax-bar-tests" */;
+			buildPhases = (
+				C9B1B3CFA04596B4293074D3 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F0E3DC474708B834FFDECA1F /* PBXTargetDependency */,
+			);
+			name = "minimax-bar-tests";
+			packageProductDependencies = (
+			);
+			productName = "minimax-bar-tests";
+			productReference = FB7DDB1EF4C02C777E1709A8 /* minimax-bar-tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -199,6 +272,7 @@
 			projectRoot = "";
 			targets = (
 				6B6343EC85B55B73E8280213 /* minimax-bar */,
+				79724BCFA1A70B2DDAAA60C0 /* minimax-bar-tests */,
 			);
 		};
 /* End PBXProject section */
@@ -209,8 +283,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB80559A03C3CF8288FB1658 /* Assets.xcassets in Resources */,
-				I18NENJSON001234567890ABCD /* en.json in Resources */,
-				I18NZHHANSJSON001234567890ABCD /* zh-Hans.json in Resources */,
+				E754BF578AB40ACFF9A0DF89 /* deepseek.template.json in Resources */,
+				6E82944C17CFD42735A25695 /* en.json in Resources */,
+				4829777107612D95B4C5D1AB /* minimax.template.json in Resources */,
+				09DE0A4E83EE55A3973A2EEE /* zh-Hans.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,9 +299,10 @@
 			files = (
 				9019EC379A8F43E20E746467 /* AppDelegate.swift in Sources */,
 				74D243841302B7F106BDF193 /* ConfigService.swift in Sources */,
-				I18NSERV001234567890ABCDBUILD /* I18nService.swift in Sources */,
+				DA3A510398D5A2CB9E26D7CD /* I18nService.swift in Sources */,
 				DF86768F82AEDF951663F51B /* MiniMaxAPIService.swift in Sources */,
 				A53715929B172C96638F5B33 /* PasteableTextField.swift in Sources */,
+				0830738F155D64BF79644BF6 /* PlatformProtocol.swift in Sources */,
 				528533B2A9783AA2ABB08C70 /* PopoverContentView.swift in Sources */,
 				E5050BAEDEF2C9B56C26D28E /* RightClickStatusBarView.swift in Sources */,
 				286B650AF2B3E06BD1FE0564 /* StatusBarController.swift in Sources */,
@@ -237,7 +314,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C9B1B3CFA04596B4293074D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9D9E3BDD97F01C89DBBE262B /* PlatformProtocolTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F0E3DC474708B834FFDECA1F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6B6343EC85B55B73E8280213 /* minimax-bar */;
+			targetProxy = B7245F53221D1D1CC4DFF874 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		34A1503FC8DF2684CBAB0C31 /* Debug */ = {
@@ -245,20 +338,40 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 3;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = App/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.minimax.statusbar;
 				PRODUCT_NAME = MiniMaxBar;
 				SDKROOT = macosx;
 				SUPublicEDKey = "8n6qpNCw5nnChaXomz88SKWPaYUXfvSo8P9fMpq/6hs=";
 			};
 			name = Debug;
+		};
+		6F30437632D57DBCB45F4FA7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MODULE_NAME = minimax_bar_tests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.minimax.statusbar.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MiniMaxBar.app/Contents/MacOS/MiniMaxBar";
+			};
+			name = Release;
 		};
 		7A2BA2F019D6C241C2E9D897 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -385,19 +498,39 @@
 			};
 			name = Debug;
 		};
+		BB26507E11E4CD240578FDB9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MODULE_NAME = minimax_bar_tests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.minimax.statusbar.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MiniMaxBar.app/Contents/MacOS/MiniMaxBar";
+			};
+			name = Debug;
+		};
 		E61E07885BF503B3A927AFBF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 3;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = App/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.minimax.statusbar;
 				PRODUCT_NAME = MiniMaxBar;
 				SDKROOT = macosx;
@@ -408,6 +541,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4873EAA054CA3ACE60FA7833 /* Build configuration list for PBXNativeTarget "minimax-bar-tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB26507E11E4CD240578FDB9 /* Debug */,
+				6F30437632D57DBCB45F4FA7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		92EEAEF19EDEC5741C6C202F /* Build configuration list for PBXNativeTarget "minimax-bar" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
