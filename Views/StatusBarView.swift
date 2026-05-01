@@ -25,9 +25,9 @@ struct StatusBarView: View {
             if let total = metric.totalValue, total > 0 {
                 let percentage: Double
                 switch displayMode {
-                case .used:
-                    percentage = metric.currentValue / total
                 case .remaining:
+                    percentage = metric.currentValue / total
+                case .used:
                     percentage = (total - metric.currentValue) / total
                 }
                 return "\(Int(percentage * 100))%"
@@ -49,15 +49,15 @@ struct StatusBarView: View {
         return "\(Int(percentage * 100))%"
     }
 
-    private var secondaryPercent: String {
+    private var secondaryPercent: String? {
         if let data = platformData, data.metrics.count > 1 {
             let metric = data.metrics[1]
             if let total = metric.totalValue, total > 0 {
                 let percentage: Double
                 switch displayMode {
-                case .used:
-                    percentage = metric.currentValue / total
                 case .remaining:
+                    percentage = metric.currentValue / total
+                case .used:
                     percentage = (total - metric.currentValue) / total
                 }
                 return "\(Int(percentage * 100))%"
@@ -67,7 +67,7 @@ struct StatusBarView: View {
         }
 
         // Legacy fallback
-        guard let data = usageData else { return "90%" }
+        guard let data = usageData else { return nil }
         let percentage: Double
         switch displayMode {
         case .used:
@@ -81,7 +81,7 @@ struct StatusBarView: View {
     private var statusColor: Color {
         if let data = platformData {
             if let metric = data.metrics.first, let total = metric.totalValue, total > 0 {
-                let remainingRatio = (total - metric.currentValue) / total
+                let remainingRatio = metric.currentValue / total
                 if remainingRatio < 0.1 {
                     return .red
                 } else if remainingRatio < 0.5 {
@@ -116,11 +116,13 @@ struct StatusBarView: View {
                 Text(primaryPercent)
                     .font(.system(size: 9, weight: .medium, design: .monospaced))
                     .lineLimit(1)
-                Text(secondaryPercent)
-                    .font(.system(size: 9, weight: .medium, design: .monospaced))
-                    .lineLimit(1)
+                if let secondary = secondaryPercent {
+                    Text(secondary)
+                        .font(.system(size: 9, weight: .medium, design: .monospaced))
+                        .lineLimit(1)
+                }
             }
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: secondaryPercent != nil ? .topLeading : .center)
         }
         .padding(.horizontal, 4)
         .frame(width: 40, height: 22, alignment: .leading)
