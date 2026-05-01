@@ -12,6 +12,7 @@
 		0A9D005C4E896E7714D67E06 /* PlatformManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB916B2998C2012BA6EADBB /* PlatformManagerTests.swift */; };
 		245787B66A41C1D181A128AD /* PlatformConfigStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF1F6C5B840A8F57937FB62 /* PlatformConfigStoreTests.swift */; };
 		286B650AF2B3E06BD1FE0564 /* StatusBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87040E0E77306174FBBAFAD7 /* StatusBarController.swift */; };
+		2876FEFE5F594050DF010DA8 /* PlatformViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D53124EA5176AA4F236043 /* PlatformViewModel.swift */; };
 		390B4A2DB3B81DDFF33ABFEE /* DeepSeekPlatformService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19CDAFF6598B35EC35C1DDFF /* DeepSeekPlatformService.swift */; };
 		3CE51A3227920DC4144E0779 /* MiniMaxPlatformService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6140B1E5502E97334482525 /* MiniMaxPlatformService.swift */; };
 		4829777107612D95B4C5D1AB /* minimax.template.json in Resources */ = {isa = PBXBuildFile; fileRef = D1523BB7CFFA93A23C2E5255 /* minimax.template.json */; };
@@ -38,6 +39,7 @@
 		E5050BAEDEF2C9B56C26D28E /* RightClickStatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62F92C3418F4C7EB016A7BF /* RightClickStatusBarView.swift */; };
 		E754BF578AB40ACFF9A0DF89 /* deepseek.template.json in Resources */ = {isa = PBXBuildFile; fileRef = D1DC839408233A8D40A6E3D4 /* deepseek.template.json */; };
 		ED82774EB141967B065BC1EE /* UsageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CB46AC7AC6D27E4E57ACFB /* UsageData.swift */; };
+		F28E2E13AB5825B936424B6D /* PlatformViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3825281C3EDE537DE3516E /* PlatformViewModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +54,7 @@
 
 /* Begin PBXFileReference section */
 		0CA7CB712CC5850919F63BC9 /* DeepSeekPlatformTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepSeekPlatformTests.swift; sourceTree = "<group>"; };
+		10D53124EA5176AA4F236043 /* PlatformViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformViewModel.swift; sourceTree = "<group>"; };
 		150DEDC5101B205458CA1070 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		1726E030B39526410E23DA72 /* UpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateService.swift; sourceTree = "<group>"; };
 		19CDAFF6598B35EC35C1DDFF /* DeepSeekPlatformService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepSeekPlatformService.swift; sourceTree = "<group>"; };
@@ -70,6 +73,7 @@
 		871B90D9020D8B1BF2C4F92D /* MockNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkService.swift; sourceTree = "<group>"; };
 		8D418F181637F4FFA5F61CED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8DDAC5967C3A1DC80CCCDFBF /* PasteableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteableTextField.swift; sourceTree = "<group>"; };
+		9F3825281C3EDE537DE3516E /* PlatformViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformViewModelTests.swift; sourceTree = "<group>"; };
 		BB4B6D4FA1AF9EBF97D498AB /* PlatformManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformManager.swift; sourceTree = "<group>"; };
 		C3D6110CE61D40E23750506A /* zh-Hans.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "zh-Hans.json"; sourceTree = "<group>"; };
 		C6140B1E5502E97334482525 /* MiniMaxPlatformService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniMaxPlatformService.swift; sourceTree = "<group>"; };
@@ -116,6 +120,7 @@
 				38BA26B0A94D40926CC08372 /* Models */,
 				4FDFDBF580D73BDE4D01905D /* Platforms */,
 				23A6CFE5CDC5E95E165EE303 /* Services */,
+				7C57128AB63F71CD37F60A42 /* ViewModels */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -184,9 +189,18 @@
 			path = App;
 			sourceTree = "<group>";
 		};
+		7C57128AB63F71CD37F60A42 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				9F3825281C3EDE537DE3516E /* PlatformViewModelTests.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		92F4121597D1495A00BEDB9C /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				10D53124EA5176AA4F236043 /* PlatformViewModel.swift */,
 				54F707908F549D97E91C0D89 /* UsageViewModel.swift */,
 			);
 			path = ViewModels;
@@ -378,6 +392,7 @@
 				95326385770795E98AD6631C /* PlatformConfigStore.swift in Sources */,
 				4DB1DF529289B8DBDF257AE9 /* PlatformManager.swift in Sources */,
 				0830738F155D64BF79644BF6 /* PlatformProtocol.swift in Sources */,
+				2876FEFE5F594050DF010DA8 /* PlatformViewModel.swift in Sources */,
 				528533B2A9783AA2ABB08C70 /* PopoverContentView.swift in Sources */,
 				E5050BAEDEF2C9B56C26D28E /* RightClickStatusBarView.swift in Sources */,
 				286B650AF2B3E06BD1FE0564 /* StatusBarController.swift in Sources */,
@@ -400,6 +415,7 @@
 				245787B66A41C1D181A128AD /* PlatformConfigStoreTests.swift in Sources */,
 				0A9D005C4E896E7714D67E06 /* PlatformManagerTests.swift in Sources */,
 				9D9E3BDD97F01C89DBBE262B /* PlatformProtocolTests.swift in Sources */,
+				F28E2E13AB5825B936424B6D /* PlatformViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
