@@ -15,8 +15,14 @@ final class DeepSeekPlatformTests: XCTestCase {
         let json = """
         {
             "is_available": true,
-            "balance": "4.50",
-            "currency": "USD"
+            "balance_infos": [
+                {
+                    "currency": "CNY",
+                    "total_balance": "3.77",
+                    "granted_balance": "0.00",
+                    "topped_up_balance": "3.77"
+                }
+            ]
         }
         """
         mockNetwork.mockData = json.data(using: .utf8)
@@ -35,10 +41,10 @@ final class DeepSeekPlatformTests: XCTestCase {
         XCTAssertEqual(result.platform, .deepseek)
         XCTAssertEqual(result.displayName, "DeepSeek")
         XCTAssertEqual(result.metrics.count, 1)
-        XCTAssertEqual(result.metrics[0].label, "Balance")
-        XCTAssertEqual(result.metrics[0].currentValue, 4.5)
+        XCTAssertEqual(result.metrics[0].label, "CNY")
+        XCTAssertEqual(result.metrics[0].currentValue, 3.77, accuracy: 0.001)
         XCTAssertNil(result.metrics[0].totalValue)
-        XCTAssertEqual(result.metrics[0].unit, "USD")
+        XCTAssertEqual(result.metrics[0].unit, "CNY")
         XCTAssertTrue(result.isHealthy)
     }
 
@@ -46,8 +52,14 @@ final class DeepSeekPlatformTests: XCTestCase {
         let json = """
         {
             "is_available": true,
-            "balance": "0.00",
-            "currency": "CNY"
+            "balance_infos": [
+                {
+                    "currency": "CNY",
+                    "total_balance": "0.00",
+                    "granted_balance": "0.00",
+                    "topped_up_balance": "0.00"
+                }
+            ]
         }
         """
         mockNetwork.mockData = json.data(using: .utf8)
@@ -64,16 +76,28 @@ final class DeepSeekPlatformTests: XCTestCase {
         let result = try await service.fetchUsage(config: config, network: mockNetwork)
 
         XCTAssertFalse(result.isHealthy)
-        XCTAssertEqual(result.metrics[0].currentValue, 0)
+        XCTAssertEqual(result.metrics[0].currentValue, 0, accuracy: 0.001)
         XCTAssertEqual(result.metrics[0].unit, "CNY")
     }
 
-    func testFetchUsageNotAvailable() async throws {
+    func testFetchUsageMultipleCurrencies() async throws {
         let json = """
         {
-            "is_available": false,
-            "balance": "10.00",
-            "currency": "USD"
+            "is_available": true,
+            "balance_infos": [
+                {
+                    "currency": "CNY",
+                    "total_balance": "10.50",
+                    "granted_balance": "5.00",
+                    "topped_up_balance": "5.50"
+                },
+                {
+                    "currency": "USD",
+                    "total_balance": "2.30",
+                    "granted_balance": "0.00",
+                    "topped_up_balance": "2.30"
+                }
+            ]
         }
         """
         mockNetwork.mockData = json.data(using: .utf8)
@@ -89,6 +113,65 @@ final class DeepSeekPlatformTests: XCTestCase {
 
         let result = try await service.fetchUsage(config: config, network: mockNetwork)
 
+        XCTAssertEqual(result.metrics.count, 2)
+        XCTAssertEqual(result.metrics[0].label, "CNY")
+        XCTAssertEqual(result.metrics[0].currentValue, 10.50, accuracy: 0.001)
+        XCTAssertEqual(result.metrics[1].label, "USD")
+        XCTAssertEqual(result.metrics[1].currentValue, 2.30, accuracy: 0.001)
+        XCTAssertTrue(result.isHealthy)
+    }
+
+    func testFetchUsageNotAvailable() async throws {
+        let json = """
+        {
+            "is_available": false,
+            "balance_infos": [
+                {
+                    "currency": "CNY",
+                    "total_balance": "10.00",
+                    "granted_balance": "0.00",
+                    "topped_up_balance": "10.00"
+                }
+            ]
+        }
+        """
+        mockNetwork.mockData = json.data(using: .utf8)
+        mockNetwork.mockResponse = MockNetworkService.makeResponse(url: "https://api.deepseek.com/user/balance", statusCode: 200)
+
+        let config = PlatformConfigData(
+            platformType: .deepseek,
+            apiBaseURL: "https://api.deepseek.com",
+            authHeader: "Authorization",
+            authPrefix: "Bearer ",
+            apiKey: "sk-test123"
+        )
+
+        let result = try await service.fetchUsage(config: config, network: mockNetwork)
+
+        XCTAssertFalse(result.isHealthy)
+    }
+
+    func testFetchUsageEmptyBalanceInfos() async throws {
+        let json = """
+        {
+            "is_available": true,
+            "balance_infos": []
+        }
+        """
+        mockNetwork.mockData = json.data(using: .utf8)
+        mockNetwork.mockResponse = MockNetworkService.makeResponse(url: "https://api.deepseek.com/user/balance", statusCode: 200)
+
+        let config = PlatformConfigData(
+            platformType: .deepseek,
+            apiBaseURL: "https://api.deepseek.com",
+            authHeader: "Authorization",
+            authPrefix: "Bearer ",
+            apiKey: "sk-test123"
+        )
+
+        let result = try await service.fetchUsage(config: config, network: mockNetwork)
+
+        XCTAssertEqual(result.metrics.count, 0)
         XCTAssertFalse(result.isHealthy)
     }
 
@@ -133,8 +216,14 @@ final class DeepSeekPlatformTests: XCTestCase {
         let json = """
         {
             "is_available": true,
-            "balance": "10.00",
-            "currency": "USD"
+            "balance_infos": [
+                {
+                    "currency": "CNY",
+                    "total_balance": "10.00",
+                    "granted_balance": "0.00",
+                    "topped_up_balance": "10.00"
+                }
+            ]
         }
         """
         mockNetwork.mockData = json.data(using: .utf8)

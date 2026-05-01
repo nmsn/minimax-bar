@@ -1,14 +1,26 @@
 import Foundation
 
+struct DeepSeekBalanceInfo: Codable {
+    let currency: String
+    let totalBalance: String
+    let grantedBalance: String
+    let toppedUpBalance: String
+
+    enum CodingKeys: String, CodingKey {
+        case currency
+        case totalBalance = "total_balance"
+        case grantedBalance = "granted_balance"
+        case toppedUpBalance = "topped_up_balance"
+    }
+}
+
 struct DeepSeekBalanceResponse: Codable {
     let isAvailable: Bool
-    let balance: String
-    let currency: String
+    let balanceInfos: [DeepSeekBalanceInfo]
 
     enum CodingKeys: String, CodingKey {
         case isAvailable = "is_available"
-        case balance
-        case currency
+        case balanceInfos = "balance_infos"
     }
 }
 
@@ -24,6 +36,10 @@ final class DeepSeekPlatformAPIService: PlatformAPIService {
         }
 
         guard !config.apiKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            throw PlatformError.notConfigured(.deepseek)
+        }
+
+        guard !config.apiBaseURL.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             throw PlatformError.notConfigured(.deepseek)
         }
 
@@ -65,15 +81,20 @@ final class DeepSeekPlatformAPIService: PlatformAPIService {
             throw PlatformError.decodingError(.deepseek, error.localizedDescription)
         }
 
-        let balance = Double(balanceResponse.balance) ?? 0
-        let isHealthy = balanceResponse.isAvailable && balance > 0
+        var metrics: [UsageMetric] = []
+        var totalBalance: Double = 0
+        for info in balanceResponse.balanceInfos {
+            let balance = Double(info.totalBalance) ?? 0
+            totalBalance += balance
+            metrics.append(UsageMetric(label: info.currency, currentValue: balance, totalValue: nil, unit: info.currency, resetTime: nil))
+        }
+
+        let isHealthy = balanceResponse.isAvailable && totalBalance > 0
 
         let usageData = PlatformUsageData(
             platform: .deepseek,
             displayName: "DeepSeek",
-            metrics: [
-                UsageMetric(label: "Balance", currentValue: balance, totalValue: nil, unit: balanceResponse.currency, resetTime: nil)
-            ],
+            metrics: metrics,
             lastUpdated: Date(),
             isHealthy: isHealthy
         )
