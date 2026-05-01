@@ -38,7 +38,7 @@ struct StatusBarView: View {
         }
 
         // Legacy fallback
-        guard let data = usageData else { return "70%" }
+        guard let data = usageData else { return "--" }
         let percentage: Double
         switch displayMode {
         case .used:
