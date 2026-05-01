@@ -9,15 +9,18 @@
 /* Begin PBXBuildFile section */
 		0830738F155D64BF79644BF6 /* PlatformProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCB26616C0F1BADA2D87E7DF /* PlatformProtocol.swift */; };
 		09DE0A4E83EE55A3973A2EEE /* zh-Hans.json in Resources */ = {isa = PBXBuildFile; fileRef = C3D6110CE61D40E23750506A /* zh-Hans.json */; };
+		245787B66A41C1D181A128AD /* PlatformConfigStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF1F6C5B840A8F57937FB62 /* PlatformConfigStoreTests.swift */; };
 		286B650AF2B3E06BD1FE0564 /* StatusBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87040E0E77306174FBBAFAD7 /* StatusBarController.swift */; };
 		4829777107612D95B4C5D1AB /* minimax.template.json in Resources */ = {isa = PBXBuildFile; fileRef = D1523BB7CFFA93A23C2E5255 /* minimax.template.json */; };
 		528533B2A9783AA2ABB08C70 /* PopoverContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E80DA8CFB7E9C241AD219562 /* PopoverContentView.swift */; };
 		54BFA213CB9610762A290F97 /* UsageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F707908F549D97E91C0D89 /* UsageViewModel.swift */; };
 		6E82944C17CFD42735A25695 /* en.json in Resources */ = {isa = PBXBuildFile; fileRef = 500D72728EF127CFEDC9A0E3 /* en.json */; };
 		74D243841302B7F106BDF193 /* ConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDC2FFB66817AEC87DEBB728 /* ConfigService.swift */; };
+		79B59D2C882BE0FA365BFC15 /* ConfigServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CA695A75E4A2B83000DEE7 /* ConfigServiceTests.swift */; };
 		7CC26FD2DFF8F211D875ED10 /* StatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58F35EDD13891BABB0C0D4F /* StatusBarView.swift */; };
 		8E87FE4B069D5B15C2F120F4 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 3CEF705F0367CC841193A983 /* Sparkle */; };
 		9019EC379A8F43E20E746467 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D418F181637F4FFA5F61CED /* AppDelegate.swift */; };
+		95326385770795E98AD6631C /* PlatformConfigStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB6045C58CB5CA7AAEA6BD9 /* PlatformConfigStore.swift */; };
 		9D9E3BDD97F01C89DBBE262B /* PlatformProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484CCC1601B73459C494F714 /* PlatformProtocolTests.swift */; };
 		A53715929B172C96638F5B33 /* PasteableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DDAC5967C3A1DC80CCCDFBF /* PasteableTextField.swift */; };
 		BA86B7C4A3722052BBA3E558 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 150DEDC5101B205458CA1070 /* main.swift */; };
@@ -45,6 +48,7 @@
 		1726E030B39526410E23DA72 /* UpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateService.swift; sourceTree = "<group>"; };
 		24CB46AC7AC6D27E4E57ACFB /* UsageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageData.swift; sourceTree = "<group>"; };
 		484CCC1601B73459C494F714 /* PlatformProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformProtocolTests.swift; sourceTree = "<group>"; };
+		4AB6045C58CB5CA7AAEA6BD9 /* PlatformConfigStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformConfigStore.swift; sourceTree = "<group>"; };
 		500D72728EF127CFEDC9A0E3 /* en.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = en.json; sourceTree = "<group>"; };
 		520CADEAEBA259864BFD13DC /* MiniMaxAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniMaxAPIService.swift; sourceTree = "<group>"; };
 		54F707908F549D97E91C0D89 /* UsageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageViewModel.swift; sourceTree = "<group>"; };
@@ -55,11 +59,13 @@
 		8D418F181637F4FFA5F61CED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8DDAC5967C3A1DC80CCCDFBF /* PasteableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteableTextField.swift; sourceTree = "<group>"; };
 		C3D6110CE61D40E23750506A /* zh-Hans.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "zh-Hans.json"; sourceTree = "<group>"; };
+		CBF1F6C5B840A8F57937FB62 /* PlatformConfigStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformConfigStoreTests.swift; sourceTree = "<group>"; };
 		D1523BB7CFFA93A23C2E5255 /* minimax.template.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = minimax.template.json; sourceTree = "<group>"; };
 		D1DC839408233A8D40A6E3D4 /* deepseek.template.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = deepseek.template.json; sourceTree = "<group>"; };
 		D58F35EDD13891BABB0C0D4F /* StatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarView.swift; sourceTree = "<group>"; };
 		D62F92C3418F4C7EB016A7BF /* RightClickStatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightClickStatusBarView.swift; sourceTree = "<group>"; };
 		DCB26616C0F1BADA2D87E7DF /* PlatformProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformProtocol.swift; sourceTree = "<group>"; };
+		E1CA695A75E4A2B83000DEE7 /* ConfigServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigServiceTests.swift; sourceTree = "<group>"; };
 		E80DA8CFB7E9C241AD219562 /* PopoverContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverContentView.swift; sourceTree = "<group>"; };
 		F079A055DFB0B0E297556514 /* I18nService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = I18nService.swift; sourceTree = "<group>"; };
 		FB7DDB1EF4C02C777E1709A8 /* minimax-bar-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "minimax-bar-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -93,8 +99,18 @@
 			isa = PBXGroup;
 			children = (
 				38BA26B0A94D40926CC08372 /* Models */,
+				23A6CFE5CDC5E95E165EE303 /* Services */,
 			);
 			path = Tests;
+			sourceTree = "<group>";
+		};
+		23A6CFE5CDC5E95E165EE303 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				E1CA695A75E4A2B83000DEE7 /* ConfigServiceTests.swift */,
+				CBF1F6C5B840A8F57937FB62 /* PlatformConfigStoreTests.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		32A2440CB531A0C02174EF1E /* Products */ = {
@@ -160,6 +176,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		A3B2D072B139114F3A4794E4 /* Platforms */ = {
+			isa = PBXGroup;
+			children = (
+				4AB6045C58CB5CA7AAEA6BD9 /* PlatformConfigStore.swift */,
+			);
+			path = Platforms;
+			sourceTree = "<group>";
+		};
 		B2F50AD92A09169DF627F857 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -191,15 +215,9 @@
 				F079A055DFB0B0E297556514 /* I18nService.swift */,
 				520CADEAEBA259864BFD13DC /* MiniMaxAPIService.swift */,
 				1726E030B39526410E23DA72 /* UpdateService.swift */,
+				A3B2D072B139114F3A4794E4 /* Platforms */,
 			);
 			path = Services;
-			sourceTree = "<group>";
-		};
-		"TEMP_F7EDD34C-4AE8-49FD-8AEC-AD5A26A8EDF8" /* Platforms */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Platforms;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -302,6 +320,7 @@
 				DA3A510398D5A2CB9E26D7CD /* I18nService.swift in Sources */,
 				DF86768F82AEDF951663F51B /* MiniMaxAPIService.swift in Sources */,
 				A53715929B172C96638F5B33 /* PasteableTextField.swift in Sources */,
+				95326385770795E98AD6631C /* PlatformConfigStore.swift in Sources */,
 				0830738F155D64BF79644BF6 /* PlatformProtocol.swift in Sources */,
 				528533B2A9783AA2ABB08C70 /* PopoverContentView.swift in Sources */,
 				E5050BAEDEF2C9B56C26D28E /* RightClickStatusBarView.swift in Sources */,
@@ -318,6 +337,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				79B59D2C882BE0FA365BFC15 /* ConfigServiceTests.swift in Sources */,
+				245787B66A41C1D181A128AD /* PlatformConfigStoreTests.swift in Sources */,
 				9D9E3BDD97F01C89DBBE262B /* PlatformProtocolTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

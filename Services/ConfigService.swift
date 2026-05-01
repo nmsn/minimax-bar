@@ -8,22 +8,66 @@ enum DisplayMode: String, Codable {
 final class ConfigService {
     static let shared = ConfigService()
 
-    private let configPath: URL
+    private var cachedDisplayMode: DisplayMode = .used
+    private var cachedActivePlatform: PlatformType = .minimax
+    private var platformStores: [PlatformType: PlatformConfigStore] = [:]
+
+    // Legacy support
+    private let legacyConfigPath: URL
     private var cachedToken: String?
     private var cachedGroupId: String?
-    private var cachedDisplayMode: DisplayMode = .used
 
     private init() {
         let home = FileManager.default.homeDirectoryForCurrentUser
-        configPath = home.appendingPathComponent(".minimax-config.json")
-        loadConfig()
+        legacyConfigPath = home.appendingPathComponent(".minimax-config.json")
+
+        loadLegacyConfig()
+        loadGlobalConfig()
+
+        // Migrate legacy config
+        PlatformConfigStore.migrateIfNeeded()
     }
+
+    // MARK: - Global Config
+
+    var displayMode: DisplayMode {
+        get { cachedDisplayMode }
+        set {
+            cachedDisplayMode = newValue
+            saveGlobalConfig()
+        }
+    }
+
+    var activePlatform: PlatformType {
+        get { cachedActivePlatform }
+        set {
+            cachedActivePlatform = newValue
+            saveGlobalConfig()
+        }
+    }
+
+    // MARK: - Platform Stores
+
+    func store(for platform: PlatformType) -> PlatformConfigStore {
+        if let existing = platformStores[platform] {
+            return existing
+        }
+        let store = PlatformConfigStore(platformType: platform)
+        platformStores[platform] = store
+        return store
+    }
+
+    func configuredPlatforms() -> [PlatformType] {
+        PlatformType.allCases.filter { store(for: $0).isConfigured }
+    }
+
+    // MARK: - Legacy Support (backward compatibility)
 
     var token: String? {
         get { cachedToken }
         set {
             cachedToken = newValue
-            saveConfig()
+            saveLegacyConfig()
         }
     }
 
@@ -31,15 +75,7 @@ final class ConfigService {
         get { cachedGroupId }
         set {
             cachedGroupId = newValue
-            saveConfig()
-        }
-    }
-
-    var displayMode: DisplayMode {
-        get { cachedDisplayMode }
-        set {
-            cachedDisplayMode = newValue
-            saveConfig()
+            saveLegacyConfig()
         }
     }
 
@@ -47,25 +83,45 @@ final class ConfigService {
         cachedToken != nil
     }
 
-    private func loadConfig() {
-        guard FileManager.default.fileExists(atPath: configPath.path) else { return }
+    func setCredentials(token: String, groupId: String?) {
+        self.cachedToken = token
+        self.cachedGroupId = groupId
+        saveLegacyConfig()
+    }
 
-        do {
-            let data = try Data(contentsOf: configPath)
-            if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                cachedToken = json["token"] as? String
-                cachedGroupId = json["groupId"] as? String
-                if let modeString = json["displayMode"] as? String,
-                   let mode = DisplayMode(rawValue: modeString) {
-                    cachedDisplayMode = mode
-                }
-            }
-        } catch {
-            // Ignore load errors, use defaults
+    // MARK: - Private
+
+    private func loadGlobalConfig() {
+        if let raw = UserDefaults.standard.string(forKey: "quotabar.displayMode"),
+           let mode = DisplayMode(rawValue: raw) {
+            cachedDisplayMode = mode
+        }
+        if let raw = UserDefaults.standard.string(forKey: "quotabar.activePlatform"),
+           let platform = PlatformType(rawValue: raw) {
+            cachedActivePlatform = platform
         }
     }
 
-    private func saveConfig() {
+    private func saveGlobalConfig() {
+        UserDefaults.standard.set(cachedDisplayMode.rawValue, forKey: "quotabar.displayMode")
+        UserDefaults.standard.set(cachedActivePlatform.rawValue, forKey: "quotabar.activePlatform")
+    }
+
+    private func loadLegacyConfig() {
+        guard FileManager.default.fileExists(atPath: legacyConfigPath.path) else { return }
+
+        do {
+            let data = try Data(contentsOf: legacyConfigPath)
+            if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                cachedToken = json["token"] as? String
+                cachedGroupId = json["groupId"] as? String
+            }
+        } catch {
+            // Ignore load errors
+        }
+    }
+
+    private func saveLegacyConfig() {
         var json: [String: Any] = [:]
         if let token = cachedToken {
             json["token"] = token
@@ -77,15 +133,9 @@ final class ConfigService {
 
         do {
             let data = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
-            try data.write(to: configPath)
+            try data.write(to: legacyConfigPath)
         } catch {
             // Ignore save errors
         }
-    }
-
-    func setCredentials(token: String, groupId: String?) {
-        self.cachedToken = token
-        self.cachedGroupId = groupId
-        saveConfig()
     }
 }
