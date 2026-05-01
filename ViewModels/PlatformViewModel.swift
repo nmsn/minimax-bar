@@ -125,6 +125,7 @@ final class PlatformViewModel: ObservableObject {
 
         let store = configService.store(for: platform)
         store.setAPIKey(trimmedKey)
+        print("[QuotaBar] saveAPIKey: platform=\(platform.rawValue), isConfigured=\(store.isConfigured), apiBaseURL=\(store.apiBaseURL)")
 
         showingConfig = false
         configPlatform = nil

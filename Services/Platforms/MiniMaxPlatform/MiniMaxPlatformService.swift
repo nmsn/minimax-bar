@@ -15,6 +15,10 @@ final class MiniMaxPlatformAPIService: PlatformAPIService {
             throw PlatformError.notConfigured(.minimax)
         }
 
+        guard !config.apiBaseURL.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            throw PlatformError.notConfigured(.minimax)
+        }
+
         guard let url = URL(string: config.apiBaseURL) else {
             throw PlatformError.invalidResponse(.minimax)
         }
