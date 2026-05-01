@@ -20,6 +20,23 @@ enum PlatformError: Error, Equatable {
     case decodingError(PlatformType, String)
 }
 
+extension PlatformError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .notConfigured:
+            return I18nService.shared.translate("error.notConfigured")
+        case .invalidResponse:
+            return I18nService.shared.translate("error.invalidResponse")
+        case .networkError(_, let message):
+            return String(format: I18nService.shared.translate("error.networkError"), message)
+        case .unauthorized:
+            return I18nService.shared.translate("error.unauthorized")
+        case .decodingError(_, let message):
+            return String(format: I18nService.shared.translate("error.networkError"), message)
+        }
+    }
+}
+
 struct PlatformUsageData: Equatable {
     let platform: PlatformType
     let displayName: String
