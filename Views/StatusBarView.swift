@@ -1,10 +1,43 @@
 import SwiftUI
 
 struct StatusBarView: View {
-    let usageData: UsageData?
+    let platformData: PlatformUsageData?
     var displayMode: DisplayMode = .used
 
-    private var dailyPercent: String {
+    // Legacy support
+    let usageData: UsageData?
+
+    init(platformData: PlatformUsageData?, displayMode: DisplayMode = .used) {
+        self.platformData = platformData
+        self.displayMode = displayMode
+        self.usageData = nil
+    }
+
+    // Legacy init
+    init(usageData: UsageData?, displayMode: DisplayMode = .used) {
+        self.platformData = nil
+        self.usageData = usageData
+        self.displayMode = displayMode
+    }
+
+    private var primaryPercent: String {
+        if let data = platformData, let metric = data.metrics.first {
+            if let total = metric.totalValue, total > 0 {
+                let percentage: Double
+                switch displayMode {
+                case .used:
+                    percentage = metric.currentValue / total
+                case .remaining:
+                    percentage = (total - metric.currentValue) / total
+                }
+                return "\(Int(percentage * 100))%"
+            } else {
+                // Balance display
+                return formatBalance(metric.currentValue, unit: metric.unit)
+            }
+        }
+
+        // Legacy fallback
         guard let data = usageData else { return "70%" }
         let percentage: Double
         switch displayMode {
@@ -16,7 +49,24 @@ struct StatusBarView: View {
         return "\(Int(percentage * 100))%"
     }
 
-    private var weeklyPercent: String {
+    private var secondaryPercent: String {
+        if let data = platformData, data.metrics.count > 1 {
+            let metric = data.metrics[1]
+            if let total = metric.totalValue, total > 0 {
+                let percentage: Double
+                switch displayMode {
+                case .used:
+                    percentage = metric.currentValue / total
+                case .remaining:
+                    percentage = (total - metric.currentValue) / total
+                }
+                return "\(Int(percentage * 100))%"
+            } else {
+                return formatBalance(metric.currentValue, unit: metric.unit)
+            }
+        }
+
+        // Legacy fallback
         guard let data = usageData else { return "90%" }
         let percentage: Double
         switch displayMode {
@@ -29,6 +79,21 @@ struct StatusBarView: View {
     }
 
     private var statusColor: Color {
+        if let data = platformData {
+            if let metric = data.metrics.first, let total = metric.totalValue, total > 0 {
+                let remainingRatio = (total - metric.currentValue) / total
+                if remainingRatio < 0.1 {
+                    return .red
+                } else if remainingRatio < 0.5 {
+                    return .yellow
+                } else {
+                    return .green
+                }
+            }
+            return data.isHealthy ? .green : .red
+        }
+
+        // Legacy fallback
         guard let data = usageData, data.dailyTotal > 0 else { return .green }
         let remainingRatio = Double(data.dailyRemaining) / Double(data.dailyTotal)
         if remainingRatio < 0.1 {
@@ -48,10 +113,10 @@ struct StatusBarView: View {
                 .foregroundColor(statusColor)
 
             VStack(alignment: .leading, spacing: 0) {
-                Text(dailyPercent)
+                Text(primaryPercent)
                     .font(.system(size: 9, weight: .medium, design: .monospaced))
                     .lineLimit(1)
-                Text(weeklyPercent)
+                Text(secondaryPercent)
                     .font(.system(size: 9, weight: .medium, design: .monospaced))
                     .lineLimit(1)
             }
@@ -60,8 +125,18 @@ struct StatusBarView: View {
         .padding(.horizontal, 4)
         .frame(width: 40, height: 22, alignment: .leading)
     }
+
+    private func formatBalance(_ value: Double, unit: String) -> String {
+        if value >= 1000 {
+            return String(format: "%.1fK", value / 1000)
+        } else if value >= 100 {
+            return String(format: "%.0f", value)
+        } else {
+            return String(format: "%.1f", value)
+        }
+    }
 }
 
 #Preview {
-    StatusBarView(usageData: nil, displayMode: .used)
+    StatusBarView(platformData: nil)
 }

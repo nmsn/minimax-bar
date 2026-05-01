@@ -7,16 +7,16 @@ class StatusBarController {
 
     private var statusItem: NSStatusItem
     private var statusBarView: RightClickStatusBarView
-    private let viewModel: UsageViewModel
+    private let viewModel: PlatformViewModel
     private var popover: NSPopover?
     private var clickMonitor: Any?
 
-    init(viewModel: UsageViewModel) {
+    init(viewModel: PlatformViewModel) {
         self.viewModel = viewModel
 
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
 
-        let statusBarContentView = StatusBarView(usageData: viewModel.usageData)
+        let statusBarContentView = StatusBarView(platformData: viewModel.activePlatformData)
         statusBarView = RightClickStatusBarView(rootView: statusBarContentView)
 
         guard let button = statusItem.button else {
@@ -48,6 +48,8 @@ class StatusBarController {
         )
         statusItem.length = fittedWidth
     }
+
+    // MARK: - Click Handling
 
     private func setupClickMonitor() {
         removeClickMonitor()
@@ -97,10 +99,12 @@ class StatusBarController {
         setupClickMonitor()
     }
 
+    // MARK: - Right Click Menu
+
     private func showDisplaySettingsSubmenu() {
         closePopoverIfNeeded()
 
-        // --- 显示设置子菜单 ---
+        // Display Settings submenu
         let displayMenu = NSMenu()
 
         let usedItem = NSMenuItem(title: I18nService.shared.translate("menu.showUsed"), action: #selector(setDisplayModeUsed), keyEquivalent: "")
@@ -116,7 +120,30 @@ class StatusBarController {
         let displaySettingsItem = NSMenuItem(title: I18nService.shared.translate("menu.displaySettings"), action: nil, keyEquivalent: "")
         displaySettingsItem.submenu = displayMenu
 
-        // --- 语言子菜单 ---
+        // Platform submenu
+        let platformMenu = NSMenu()
+        for platform in PlatformType.allCases {
+            let item = NSMenuItem(title: platform.displayName, action: #selector(switchPlatform(_:)), keyEquivalent: "")
+            item.target = self
+            item.representedObject = platform.rawValue
+            item.state = platform == viewModel.activePlatform ? .on : .off
+
+            if !viewModel.isConfigured(platform) {
+                item.isEnabled = false
+                item.title = platform.displayName + " (" + I18nService.shared.translate("menu.notConfigured") + ")"
+            }
+
+            platformMenu.addItem(item)
+        }
+        platformMenu.addItem(NSMenuItem.separator())
+        let configureItem = NSMenuItem(title: I18nService.shared.translate("menu.configurePlatform"), action: #selector(showConfigMenu), keyEquivalent: "")
+        configureItem.target = self
+        platformMenu.addItem(configureItem)
+
+        let platformItem = NSMenuItem(title: I18nService.shared.translate("menu.platform"), action: nil, keyEquivalent: "")
+        platformItem.submenu = platformMenu
+
+        // Language submenu
         let languageMenu = NSMenu()
         let isEnglish = I18nService.shared.currentLocale == "en"
 
@@ -133,9 +160,10 @@ class StatusBarController {
         let languageItem = NSMenuItem(title: I18nService.shared.translate("menu.language"), action: nil, keyEquivalent: "")
         languageItem.submenu = languageMenu
 
-        // --- 根菜单 ---
+        // Root menu
         let rootMenu = NSMenu()
         rootMenu.addItem(displaySettingsItem)
+        rootMenu.addItem(platformItem)
         rootMenu.addItem(languageItem)
         rootMenu.addItem(NSMenuItem.separator())
 
@@ -152,6 +180,20 @@ class StatusBarController {
         statusItem.menu = rootMenu
         statusItem.button?.performClick(nil)
         statusItem.menu = nil
+    }
+
+    // MARK: - Actions
+
+    @objc private func switchPlatform(_ sender: NSMenuItem) {
+        guard let rawValue = sender.representedObject as? String,
+              let platform = PlatformType(rawValue: rawValue) else { return }
+        viewModel.switchActivePlatform(platform)
+        updateStatusBarView()
+    }
+
+    @objc private func showConfigMenu() {
+        viewModel.configureAPIKey(for: viewModel.activePlatform)
+        statusItemClicked()
     }
 
     @objc private func setDisplayModeUsed() {
@@ -174,34 +216,6 @@ class StatusBarController {
         updateStatusBarView()
     }
 
-    private func updateStatusBarView() {
-        statusBarView.update(rootView: StatusBarView(
-            usageData: viewModel.usageData,
-            displayMode: ConfigService.shared.displayMode
-        ))
-        statusBarView.layoutSubtreeIfNeeded()
-    }
-
-    private func showContextMenu() {
-        closePopoverIfNeeded()
-
-        let menu = NSMenu()
-
-        let checkUpdateItem = NSMenuItem(title: I18nService.shared.translate("menu.checkUpdate"), action: #selector(checkUpdateAction), keyEquivalent: "")
-        checkUpdateItem.target = self
-        menu.addItem(checkUpdateItem)
-
-        menu.addItem(NSMenuItem.separator())
-
-        let quitItem = NSMenuItem(title: I18nService.shared.translate("menu.quit"), action: #selector(quitAction), keyEquivalent: "q")
-        quitItem.target = self
-        menu.addItem(quitItem)
-
-        statusItem.menu = menu
-        statusItem.button?.performClick(nil)
-        statusItem.menu = nil
-    }
-
     @objc private func checkUpdateAction() {
         UpdateService.shared.checkForUpdates()
     }
@@ -210,9 +224,19 @@ class StatusBarController {
         NSApplication.shared.terminate(nil)
     }
 
-    func update(usageData: UsageData?) {
+    // MARK: - Update
+
+    private func updateStatusBarView() {
         statusBarView.update(rootView: StatusBarView(
-            usageData: usageData,
+            platformData: viewModel.activePlatformData,
+            displayMode: ConfigService.shared.displayMode
+        ))
+        statusBarView.layoutSubtreeIfNeeded()
+    }
+
+    func update(data: PlatformUsageData?) {
+        statusBarView.update(rootView: StatusBarView(
+            platformData: data,
             displayMode: ConfigService.shared.displayMode
         ))
         statusBarView.layoutSubtreeIfNeeded()

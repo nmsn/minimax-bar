@@ -1,24 +1,17 @@
 import SwiftUI
 
 struct PopoverContentView: View {
-    @ObservedObject var viewModel: UsageViewModel
+    @ObservedObject var viewModel: PlatformViewModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             headerSection
 
-            if viewModel.showingTokenInput {
-                tokenInputSection
-            } else if viewModel.showingTokenReset {
-                tokenResetSection
-            } else if let error = viewModel.errorMessage {
-                errorSection(error)
-            } else if viewModel.usageData != nil {
-                usageSection
-            } else if viewModel.isLoading {
-                loadingSection
+            if viewModel.showingConfig {
+                configSection
             } else {
-                emptySection
+                platformNavigator
+                platformContent
             }
 
             Spacer()
@@ -26,169 +19,142 @@ struct PopoverContentView: View {
             footerSection
         }
         .padding()
-        .frame(width: 280, height: 280)
-        .onAppear {
-            viewModel.resetToUsageView()
-        }
+        .frame(width: 280, height: 320)
     }
+
+    // MARK: - Header
 
     private var headerSection: some View {
         HStack {
-            Text(I18nService.shared.translate("app.name"))
+            Text("QuotaBar")
                 .font(.headline)
             Spacer()
-            if viewModel.isLoading {
+            if viewModel.isActivePlatformLoading {
                 Image(systemName: "arrow.clockwise")
                     .font(.system(size: 12))
-                    .rotationEffect(.degrees(viewModel.isLoading ? 360 : 0))
-                    .animation(.linear(duration: 1).repeatForever(autoreverses: false), value: viewModel.isLoading)
+                    .rotationEffect(.degrees(360))
+                    .animation(.linear(duration: 1).repeatForever(autoreverses: false), value: viewModel.isActivePlatformLoading)
             }
         }
     }
 
-    private var tokenInputSection: some View {
-        VStack(spacing: 12) {
-            HStack {
-                Spacer()
-                Button(action: {
-                    if let url = URL(string: "https://platform.minimaxi.com/user-center/payment/coding-plan") {
-                        NSWorkspace.shared.open(url)
-                    }
-                }) {
-                    Image(systemName: "arrow.up.right.square")
+    // MARK: - Platform Navigator
+
+    private var platformNavigator: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(viewModel.allPlatforms, id: \.self) { platform in
+                    platformTab(platform)
                 }
-                .buttonStyle(.bordered)
             }
+        }
+    }
 
-            Text(I18nService.shared.translate("popover.configureToken"))
-                .font(.subheadline.bold())
+    private func platformTab(_ platform: PlatformType) -> some View {
+        let isActive = platform == viewModel.activePlatform
+        let isConfigured = viewModel.isConfigured(platform)
 
-            PasteableTextField(text: $viewModel.tokenInput, placeholder: I18nService.shared.translate("popover.inputPlaceholder"))
-                .frame(height: 60)
-
-            HStack {
-                Button(action: {
-                    viewModel.resetToUsageView()
-                }) {
-                    Image(systemName: "xmark")
+        return Button(action: {
+            viewModel.switchActivePlatform(platform)
+        }) {
+            HStack(spacing: 4) {
+                Text(viewModel.platformDisplayName(platform))
+                    .font(.caption.bold())
+                if !isConfigured {
+                    Image(systemName: "gear")
+                        .font(.system(size: 8))
                 }
-                .buttonStyle(.bordered)
-
-                Button(action: {
-                    viewModel.saveToken()
-                }) {
-                    Image(systemName: "checkmark")
-                }
-                .buttonStyle(.borderedProminent)
-                .disabled(viewModel.tokenInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(isActive ? Color.accentColor : Color.gray.opacity(0.2))
+            .foregroundColor(isActive ? .white : .primary)
+            .cornerRadius(4)
         }
-        .padding()
-        .background(Color.accentColor.opacity(0.08))
-        .cornerRadius(8)
+        .buttonStyle(.plain)
     }
 
-    private var tokenResetSection: some View {
-        VStack(spacing: 16) {
-            Label(I18nService.shared.translate("popover.tokenConfigured"), systemImage: "checkmark.circle.fill")
-                .font(.subheadline.bold())
-                .foregroundColor(.green)
+    // MARK: - Platform Content
 
-            Button(action: {
-                viewModel.showTokenReset()
-            }) {
-                Image(systemName: "arrow.counterclockwise")
-            }
-            .buttonStyle(.bordered)
+    @ViewBuilder
+    private var platformContent: some View {
+        let platform = viewModel.activePlatform
+
+        if !viewModel.isConfigured(platform) {
+            unconfiguredSection(platform)
+        } else if let error = viewModel.platformErrors[platform] {
+            errorSection(error)
+        } else if let data = viewModel.platformData[platform] {
+            metricsSection(data)
+        } else if viewModel.isLoading[platform] == true {
+            loadingSection
+        } else {
+            emptySection
         }
-        .padding()
-        .frame(maxWidth: .infinity)
-        .background(Color.accentColor.opacity(0.08))
-        .cornerRadius(8)
     }
 
-    private func errorSection(_ error: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Label(I18nService.shared.translate("popover.error"), systemImage: "exclamationmark.triangle.fill")
-                .font(.subheadline.bold())
-                .foregroundColor(.red)
-            Text(error)
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
-        .padding()
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.red.opacity(0.1))
-        .cornerRadius(8)
-    }
+    // MARK: - Metrics Display
 
-    private var usageSection: some View {
+    private func metricsSection(_ data: PlatformUsageData) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            dailySection
-            weeklySection
-
-            if let expiry = viewModel.usageData?.expiryDate {
-                expirySection(expiry)
+            ForEach(data.metrics.indices, id: \.self) { index in
+                metricCard(data.metrics[index])
             }
 
-            statusSection
+            statusSection(data.isHealthy)
         }
     }
 
-    private var dailySection: some View {
+    private func metricCard(_ metric: UsageMetric) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Label(I18nService.shared.translate("popover.daily"), systemImage: "sun.max")
+            Label(metric.label, systemImage: metricIcon(metric))
                 .font(.caption.bold())
 
             HStack {
-                Text("\(I18nService.shared.translate("popover.remaining")): \(viewModel.usageData?.dailyRemaining ?? 0)/\(viewModel.usageData?.dailyTotal ?? 0) \(I18nService.shared.translate("popover.unit.times"))")
-                    .font(.caption)
+                if let total = metric.totalValue, total > 0 {
+                    Text("\(I18nService.shared.translate("popover.remaining")): \(Int(metric.currentValue))/\(Int(total)) \(metric.unit)")
+                        .font(.caption)
+                } else {
+                    Text("\(metric.currentValue, specifier: "%.2f") \(metric.unit)")
+                        .font(.caption)
+                }
                 Spacer()
             }
 
-            Text(I18nService.shared.translate("popover.reset") + ": " + formatResetTime(viewModel.usageData?.dailyResetMs ?? 0))
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
-        .padding(8)
-        .background(Color.orange.opacity(0.15))
-        .cornerRadius(6)
-    }
-
-    private var weeklySection: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Label(I18nService.shared.translate("popover.weekly"), systemImage: "calendar")
-                .font(.caption.bold())
-
-            HStack {
-                Text("\(I18nService.shared.translate("popover.remaining")): \(viewModel.usageData?.weeklyRemaining ?? 0)/\(viewModel.usageData?.weeklyTotal ?? 0) \(I18nService.shared.translate("popover.unit.times"))")
+            if let resetTime = metric.resetTime {
+                Text(I18nService.shared.translate("popover.reset") + ": " + formatResetTime(resetTime))
                     .font(.caption)
-                Spacer()
+                    .foregroundColor(.secondary)
             }
-
-            Text("\(I18nService.shared.translate("popover.reset")): \(viewModel.usageData?.weeklyResetFormatted ?? "")")
-                .font(.caption)
-                .foregroundColor(.secondary)
         }
         .padding(8)
-        .background(Color.blue.opacity(0.15))
+        .background(metricColor(metric).opacity(0.15))
         .cornerRadius(6)
     }
 
-    private func expirySection(_ date: Date) -> some View {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/MM/dd"
-
-        return HStack {
-            Text("\(I18nService.shared.translate("popover.expiry")): \(formatter.string(from: date))")
-                .font(.caption)
-                .foregroundColor(.secondary)
+    private func metricIcon(_ metric: UsageMetric) -> String {
+        switch metric.label {
+        case "Daily": return "sun.max"
+        case "Weekly": return "calendar"
+        case "Balance": return "dollarsign.circle"
+        default: return "chart.bar"
         }
     }
 
-    private var statusSection: some View {
+    private func metricColor(_ metric: UsageMetric) -> Color {
+        switch metric.label {
+        case "Daily": return .orange
+        case "Weekly": return .blue
+        case "Balance": return .green
+        default: return .gray
+        }
+    }
+
+    // MARK: - Status
+
+    private func statusSection(_ isHealthy: Bool) -> some View {
         HStack {
-            if viewModel.usageData?.isHealthy == true {
+            if isHealthy {
                 Label(I18nService.shared.translate("popover.normal"), systemImage: "checkmark.circle.fill")
                     .font(.caption.bold())
                     .foregroundColor(.green)
@@ -200,6 +166,71 @@ struct PopoverContentView: View {
             Spacer()
         }
     }
+
+    // MARK: - Config Section
+
+    private var configSection: some View {
+        VStack(spacing: 12) {
+            Text(String(format: I18nService.shared.translate("popover.configurePlatform"), viewModel.configPlatform?.displayName ?? ""))
+                .font(.subheadline.bold())
+
+            PasteableTextField(text: $viewModel.apiKeyInput, placeholder: I18nService.shared.translate("popover.inputPlaceholder"))
+                .frame(height: 60)
+
+            HStack {
+                Button(action: { viewModel.cancelConfig() }) {
+                    Image(systemName: "xmark")
+                }
+                .buttonStyle(.bordered)
+
+                Button(action: { viewModel.saveAPIKey() }) {
+                    Image(systemName: "checkmark")
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(viewModel.apiKeyInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            }
+        }
+        .padding()
+        .background(Color.accentColor.opacity(0.08))
+        .cornerRadius(8)
+    }
+
+    // MARK: - Unconfigured Section
+
+    private func unconfiguredSection(_ platform: PlatformType) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Label(String(format: I18nService.shared.translate("popover.platformNotConfigured"), platform.displayName), systemImage: "gear")
+                .font(.subheadline.bold())
+
+            Button(action: { viewModel.configureAPIKey(for: platform) }) {
+                Text(I18nService.shared.translate("popover.configureNow"))
+            }
+            .buttonStyle(.borderedProminent)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(8)
+    }
+
+    // MARK: - Error Section
+
+    private func errorSection(_ error: PlatformError) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Label(I18nService.shared.translate("popover.error"), systemImage: "exclamationmark.triangle.fill")
+                .font(.subheadline.bold())
+                .foregroundColor(.red)
+            Text(error.localizedDescription)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.red.opacity(0.1))
+        .cornerRadius(8)
+    }
+
+    // MARK: - Loading & Empty
 
     private var loadingSection: some View {
         VStack {
@@ -224,24 +255,24 @@ struct PopoverContentView: View {
         .cornerRadius(8)
     }
 
+    // MARK: - Footer
+
     private var footerSection: some View {
         HStack(spacing: 8) {
-            if viewModel.showingTokenInput || viewModel.showingTokenReset {
-                Button(action: { viewModel.resetToUsageView() }) {
+            if viewModel.showingConfig {
+                Button(action: { viewModel.cancelConfig() }) {
                     Image(systemName: "chevron.left")
                 }
                 .buttonStyle(.bordered)
             } else {
                 Button(action: {
-                    Task {
-                        await viewModel.refresh()
-                    }
+                    viewModel.fetchAllUsage()
                 }) {
                     Image(systemName: "arrow.clockwise")
                 }
                 .buttonStyle(.bordered)
 
-                Button(action: { viewModel.toggleTokenInput() }) {
+                Button(action: { viewModel.configureAPIKey(for: viewModel.activePlatform) }) {
                     Image(systemName: "gear")
                 }
                 .buttonStyle(.bordered)
@@ -252,11 +283,19 @@ struct PopoverContentView: View {
         .padding(.vertical, 4)
     }
 
-    private func formatResetTime(_ ms: Int) -> String {
-        let hours = ms / (1000 * 60 * 60)
-        let minutes = (ms % (1000 * 60 * 60)) / (1000 * 60)
-        if hours == 0 && minutes == 0 {
-            return I18nService.shared.translate("daily.reset.soon")
+    // MARK: - Helpers
+
+    private func formatResetTime(_ date: Date) -> String {
+        let interval = date.timeIntervalSinceNow
+        guard interval > 0 else { return I18nService.shared.translate("daily.reset.soon") }
+
+        let hours = Int(interval) / 3600
+        let minutes = (Int(interval) % 3600) / 60
+
+        if hours > 24 {
+            let days = hours / 24
+            let remainingHours = hours % 24
+            return String(format: I18nService.shared.translate("weekly.reset.remaining"), days, remainingHours)
         } else if hours > 0 {
             return String(format: I18nService.shared.translate("daily.reset.remaining"), hours, minutes)
         } else {
