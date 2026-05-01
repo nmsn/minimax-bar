@@ -2,9 +2,9 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-# MiniMaxBar
+# QuotaBar
 
-A macOS menu bar app displaying MiniMax API usage statistics. Built with SwiftUI + AppKit hybrid architecture.
+A macOS menu bar app displaying AI platform API usage/quota statistics. Built with SwiftUI + AppKit hybrid architecture. Supports multiple platforms (MiniMax, DeepSeek).
 
 ## Build Commands
 
@@ -13,38 +13,66 @@ A macOS menu bar app displaying MiniMax API usage statistics. Built with SwiftUI
 xcodegen generate
 
 # Debug build
-xcodebuild -project minimax-bar.xcodeproj -scheme minimax-bar -configuration Debug build
+xcodebuild -project quota-bar.xcodeproj -scheme quota-bar -configuration Debug build
 
 # Release build
-xcodebuild -project minimax-bar.xcodeproj -scheme minimax-bar -configuration Release build
+xcodebuild -project quota-bar.xcodeproj -scheme quota-bar -configuration Release build
+
+# Run tests
+xcodebuild -project quota-bar.xcodeproj -scheme quota-bar -destination 'platform=macOS' test
 
 # Package as DMG
-hdiutil create -volname MiniMaxBar -srcfolder build/Release/MiniMaxBar.app -ov -format UDZO -o MiniMaxBar.dmg
+hdiutil create -volname QuotaBar -srcfolder build/Release/QuotaBar.app -ov -format UDZO -o QuotaBar.dmg
 ```
 
 ## Architecture
 
 - **Menu bar app** (LSUIElement=true, no dock icon)
 - **SwiftUI + AppKit hybrid**: SwiftUI views inside NSStatusItem via NSHostingController
-- **Architecture pattern**: ViewModel + Services (similar to MVC)
+- **Protocol-based multi-platform architecture**: each platform implements `PlatformAPIService` protocol
 
 ### Directory Structure
 
 | Directory | Purpose |
 |-----------|---------|
 | `App/` | Entry point (`main.swift`, `AppDelegate.swift`), Info.plist |
-| `Models/` | Data models (`UsageData`) |
-| `Services/` | Business logic - `ConfigService` (UserDefaults), `MiniMaxAPIService` (API calls), `I18nService` (localization), `UpdateService` (Sparkle) |
-| `StatusBar/` | Menu bar UI - `StatusBarController` manages NSStatusItem, `RightClickStatusBarView` handles clicks |
-| `ViewModels/` | `UsageViewModel` - bridges services and views |
-| `Views/` | SwiftUI views - `PopoverContentView` (main popover), `StatusBarView` (menu bar icon) |
+| `Models/` | Data models (`PlatformProtocol.swift` - core types, `UsageData.swift` - legacy) |
+| `Services/` | Business logic |
+| `Services/Platforms/` | Platform-specific services |
+| `Services/Platforms/MiniMaxPlatform/` | MiniMax API service |
+| `Services/Platforms/DeepSeekPlatform/` | DeepSeek API service |
+| `Services/Platforms/PlatformManager.swift` | Orchestrates all platform services |
+| `Services/Platforms/PlatformConfigStore.swift` | Per-platform config file management |
+| `Services/ConfigService.swift` | Global config (display mode, active platform, locale) |
+| `Services/NetworkService.swift` | Network abstraction for testability |
+| `StatusBar/` | Menu bar UI - `StatusBarController` manages NSStatusItem |
+| `ViewModels/` | `PlatformViewModel` - manages multiple platform data |
+| `Views/` | SwiftUI views - `PopoverContentView`, `StatusBarView` |
+| `Tests/` | Unit tests with mocks |
+| `Resources/ConfigTemplates/` | Config templates for each platform |
+
+### Key Protocols
+
+- `PlatformAPIService` - each platform implements this for API calls
+- `NetworkService` - network abstraction (URLSession wrapper for testability)
+- `PlatformType` - enum identifying supported platforms
 
 ### Key Patterns
 
 - **StatusBarController** creates NSStatusItem, adds subview via `button.addSubview(statusBarView)`
 - **RightClickStatusBarView** intercepts clicks via override, emits callbacks for left/right click
 - **Popover** shown relative to status bar button bounds with `.minY` edge
+- **Platform switching** via right-click menu or popover tabs
 - **I18nService** uses JSON files in Resources (`en.json`, `zh-Hans.json`), locale stored in ConfigService
+
+## Adding a New Platform
+
+1. Add case to `PlatformType` enum in `Models/PlatformProtocol.swift`
+2. Create config template in `Resources/ConfigTemplates/{platform}.template.json`
+3. Create `Services/Platforms/{Platform}Platform/{Platform}PlatformService.swift` implementing `PlatformAPIService`
+4. Register in `PlatformManager.init()`
+5. Add I18n strings in `Resources/en.json` and `Resources/zh-Hans.json`
+6. Write tests first (TDD)
 
 ## Git Workflow
 
