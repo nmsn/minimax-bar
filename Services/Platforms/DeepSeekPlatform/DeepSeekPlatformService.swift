@@ -27,7 +27,7 @@ struct DeepSeekBalanceResponse: Codable {
 final class DeepSeekPlatformAPIService: PlatformAPIService {
     let platformType: PlatformType = .deepseek
 
-    private let cacheTimeout: TimeInterval = 8
+    private let cacheTimeout: TimeInterval = 10
     private var cache: (data: PlatformUsageData, timestamp: Date)?
 
     func fetchUsage(config: PlatformConfigData, network: NetworkService) async throws -> PlatformUsageData {
