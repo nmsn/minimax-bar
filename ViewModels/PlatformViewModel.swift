@@ -35,7 +35,8 @@ final class PlatformViewModel: ObservableObject {
 
     func startAutoRefresh() {
         stopAutoRefresh()
-        timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [weak self] _ in
+        let interval = configService.refreshInterval.timeInterval
+        timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
             Task { @MainActor [weak self] in
                 await self?.fetchAllUsage()
             }
@@ -48,6 +49,10 @@ final class PlatformViewModel: ObservableObject {
     func stopAutoRefresh() {
         timer?.invalidate()
         timer = nil
+    }
+
+    func restartAutoRefresh() {
+        startAutoRefresh()
     }
 
     // MARK: - Fetch
@@ -125,7 +130,6 @@ final class PlatformViewModel: ObservableObject {
 
         let store = configService.store(for: platform)
         store.setAPIKey(trimmedKey)
-        print("[QuotaBar] saveAPIKey: platform=\(platform.rawValue), isConfigured=\(store.isConfigured), apiBaseURL=\(store.apiBaseURL)")
 
         showingConfig = false
         configPlatform = nil

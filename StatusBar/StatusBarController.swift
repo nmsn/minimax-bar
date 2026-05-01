@@ -120,6 +120,22 @@ class StatusBarController {
         let displaySettingsItem = NSMenuItem(title: I18nService.shared.translate("menu.displaySettings"), action: nil, keyEquivalent: "")
         displaySettingsItem.submenu = displayMenu
 
+        // Refresh Interval submenu
+        let refreshMenu = NSMenu()
+        for interval in RefreshInterval.allCases {
+            let item = NSMenuItem(
+                title: I18nService.shared.translate(interval.i18nKey),
+                action: #selector(setRefreshInterval(_:)),
+                keyEquivalent: ""
+            )
+            item.target = self
+            item.representedObject = interval.rawValue
+            item.state = interval == ConfigService.shared.refreshInterval ? .on : .off
+            refreshMenu.addItem(item)
+        }
+        let refreshItem = NSMenuItem(title: I18nService.shared.translate("menu.refreshInterval"), action: nil, keyEquivalent: "")
+        refreshItem.submenu = refreshMenu
+
         // Platform submenu
         let platformMenu = NSMenu()
         for platform in PlatformType.allCases {
@@ -163,6 +179,7 @@ class StatusBarController {
         // Root menu
         let rootMenu = NSMenu()
         rootMenu.addItem(displaySettingsItem)
+        rootMenu.addItem(refreshItem)
         rootMenu.addItem(platformItem)
         rootMenu.addItem(languageItem)
         rootMenu.addItem(NSMenuItem.separator())
@@ -204,6 +221,13 @@ class StatusBarController {
     @objc private func setDisplayModeRemaining() {
         ConfigService.shared.displayMode = .remaining
         updateStatusBarView()
+    }
+
+    @objc private func setRefreshInterval(_ sender: NSMenuItem) {
+        guard let rawValue = sender.representedObject as? String,
+              let interval = RefreshInterval(rawValue: rawValue) else { return }
+        ConfigService.shared.refreshInterval = interval
+        viewModel.restartAutoRefresh()
     }
 
     @objc private func setLanguageEnglish() {

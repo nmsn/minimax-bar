@@ -10,6 +10,7 @@ final class ConfigService {
 
     private var cachedDisplayMode: DisplayMode = .used
     private var cachedActivePlatform: PlatformType = .minimax
+    private var cachedRefreshInterval: RefreshInterval = .default
     private var platformStores: [PlatformType: PlatformConfigStore] = [:]
 
     private init() {
@@ -30,6 +31,14 @@ final class ConfigService {
         get { cachedActivePlatform }
         set {
             cachedActivePlatform = newValue
+            saveGlobalConfig()
+        }
+    }
+
+    var refreshInterval: RefreshInterval {
+        get { cachedRefreshInterval }
+        set {
+            cachedRefreshInterval = newValue
             saveGlobalConfig()
         }
     }
@@ -60,10 +69,15 @@ final class ConfigService {
            let platform = PlatformType(rawValue: raw) {
             cachedActivePlatform = platform
         }
+        if let raw = UserDefaults.standard.string(forKey: "quotabar.refreshInterval"),
+           let interval = RefreshInterval(rawValue: raw) {
+            cachedRefreshInterval = interval
+        }
     }
 
     private func saveGlobalConfig() {
         UserDefaults.standard.set(cachedDisplayMode.rawValue, forKey: "quotabar.displayMode")
         UserDefaults.standard.set(cachedActivePlatform.rawValue, forKey: "quotabar.activePlatform")
+        UserDefaults.standard.set(cachedRefreshInterval.rawValue, forKey: "quotabar.refreshInterval")
     }
 }

@@ -76,3 +76,33 @@ protocol PlatformAPIService {
     func fetchUsage(config: PlatformConfigData, network: NetworkService) async throws -> PlatformUsageData
     func clearCache()
 }
+
+enum RefreshInterval: String, Codable, CaseIterable {
+    case thirtySeconds
+    case oneMinute
+    case threeMinutes
+    case fiveMinutes
+    case tenMinutes
+
+    var timeInterval: TimeInterval {
+        switch self {
+        case .thirtySeconds: return 30
+        case .oneMinute: return 60
+        case .threeMinutes: return 180
+        case .fiveMinutes: return 300
+        case .tenMinutes: return 600
+        }
+    }
+
+    var i18nKey: String {
+        switch self {
+        case .thirtySeconds: return "menu.refresh.30s"
+        case .oneMinute: return "menu.refresh.1m"
+        case .threeMinutes: return "menu.refresh.3m"
+        case .fiveMinutes: return "menu.refresh.5m"
+        case .tenMinutes: return "menu.refresh.10m"
+        }
+    }
+
+    static let `default`: RefreshInterval = .oneMinute
+}
